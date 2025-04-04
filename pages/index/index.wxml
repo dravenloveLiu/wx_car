@@ -74,12 +74,14 @@
             wx:key="id"
             bindtap="navigateTo"
             data-url="{{item.url}}">
-        <view class="recommendation-image" style="background-color: #f0f0f0">
+        <view class="recommendation-image" style="background-color: #{{item.id * 3}}{{item.id * 2}}{{item.id * 5}}">
           <text class="recommendation-placeholder">{{item.name[0]}}</text>
         </view>
         <view class="recommendation-info">
-          <text class="recommendation-name">{{item.name}}</text>
-          <text class="recommendation-desc">{{item.desc}}</text>
+          <view>
+            <text class="recommendation-name">{{item.name}}</text>
+            <text class="recommendation-desc">{{item.desc}}</text>
+          </view>
           <text class="recommendation-price">¥{{item.price}}</text>
         </view>
       </view>
