@@ -27,6 +27,10 @@ import com.carservice.exception.BusinessException;
 import com.carservice.vo.LoginVO;
 import com.carservice.vo.ResultVO;
 import com.carservice.util.UserHolder;
+import com.carservice.service.AuthService;
+import com.carservice.util.JwtUtil;
+import com.carservice.vo.LoginRequest;
+import com.carservice.vo.SendCodeRequest;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,9 +50,14 @@ public class AuthController {
     @Resource
     SmsComponent smsComponent;
 
-
     @Autowired
     StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private AuthService authService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     // 内存中存储验证码，实际项目建议使用Redis
     private static final Map<String, String> CODE_MAP = new ConcurrentHashMap<>();
@@ -84,7 +93,6 @@ public class AuthController {
         // 验证码缓存到redis中（并且记录当前时间戳）
         redisTemplate.opsForValue().set(AuthConstant.SMS_CODE_CACHE_PREFIX + phone, verificationCode + "_" + System.currentTimeMillis(), 10, TimeUnit.MINUTES);
 
-
         // 模拟发送验证码的过程，实际开发中需要调用短信API
         log.info("向手机号 {} 发送验证码: {}", phone, verificationCode);
         smsComponent.sendCode(phone, verificationCode);
@@ -93,55 +101,107 @@ public class AuthController {
     }
 
     /**
-     * 用户登录
-     *
-     * @param loginDTO 登录信息
-     * @return 登录结果
+     * 登录接口，同时支持微信登录和手机号登录
      */
     @PostMapping("/login")
-    public ResultVO<LoginVO> login(@RequestBody LoginDTO loginDTO) {
-        // 验证参数
-        if (loginDTO == null || !StringUtils.hasText(loginDTO.getPhone())) {
-            throw new BusinessException(Constant.Code.PARAM_ERROR, "登录参数不完整");
+    public ResultVO login(@RequestBody LoginRequest request) {
+        // 根据loginType区分登录方式
+        if ("wechat".equals(request.getLoginType())) {
+            // 微信登录流程
+            return handleWechatLogin(request);
+        } else if ("phone".equals(request.getLoginType())) {
+            // 手机号登录流程
+            return handlePhoneLogin(request);
+        } else {
+            return ResultVO.error(Constant.Code.PARAM_ERROR, "不支持的登录方式");
         }
-
-        // 验证验证码
-        if (!StringUtils.hasText(loginDTO.getCode())) {
-            throw new BusinessException(Constant.Code.PARAM_ERROR, "验证码不能为空");
-        }
-
-        // 从内存中获取验证码记录
-      //  String codeRecord = CODE_MAP.get(loginDTO.getPhone());
-        String codeRecord = redisTemplate.opsForValue().get(AuthConstant.SMS_CODE_CACHE_PREFIX + loginDTO.getPhone());
-        if (!StringUtils.hasText(codeRecord)) {
-            throw new BusinessException(Constant.Code.PARAM_ERROR, "验证码已过期，请重新获取");
-        }
-
-//        // 解析验证码和发送时间
-//        String[] parts = codeRecord.split(":");
-//        String code = parts[0];
-//        long sendTime = Long.parseLong(parts[1]);
-//
-//        // 验证码过期校验
-//        if (System.currentTimeMillis() - sendTime > CODE_EXPIRE_TIME) {
-//            CODE_MAP.remove(loginDTO.getPhone());
-//            throw new BusinessException(Constant.Code.PARAM_ERROR, "验证码已过期，请重新获取");
-//        }
-//
-//        // 验证码匹配校验
-//        if (!code.equals(loginDTO.getCode())) {
-//            throw new BusinessException(Constant.Code.PARAM_ERROR, "验证码不正确");
-//        }
-//
-//        // 验证通过，移除验证码记录
-//        CODE_MAP.remove(loginDTO.getPhone());
-        redisTemplate.delete(AuthConstant.SMS_CODE_CACHE_PREFIX + loginDTO.getPhone());
-        // 调用登录服务
-        LoginVO loginVO = userService.login(loginDTO);
-
-        return ResultVO.success(loginVO);
     }
-    
+
+    /**
+     * 处理微信登录
+     */
+    private ResultVO handleWechatLogin(LoginRequest request) {
+        String code = request.getCode();
+        
+        try {
+            // 1. 调用微信API获取openid和session_key
+            Map<String, String> wxResult = authService.code2Session(code);
+            
+            if (wxResult == null || !wxResult.containsKey("openid")) {
+                return ResultVO.error(Constant.Code.PARAM_ERROR, "微信授权失败");
+            }
+            
+            String openid = wxResult.get("openid");
+            
+            // 2. 根据openid查找用户
+            User user = userService.findByOpenid(openid);
+            boolean isNewUser = false;
+            
+            if (user == null) {
+                // 3. 如果用户不存在，创建新用户
+                user = new User();
+                user.setOpenId(openid);
+                user.setNickname(request.getNickname());
+                user.setAvatar(request.getAvatarUrl());
+                user.setGender(request.getGender());
+                userService.saveUser(user);
+                isNewUser = true;
+            }
+            
+            // 4. 生成JWT token
+            String token = jwtUtil.generateToken(user.getId().toString());
+            
+            // 5. 组装返回数据
+            Map<String, Object> result = new HashMap<>();
+            result.put("token", AuthConstant.TOKEN_PREFIX + token);
+            result.put("userInfo", user);
+            result.put("isNewUser", isNewUser);
+            
+            return ResultVO.success(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultVO.error(Constant.Code.PARAM_ERROR, "微信登录失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 处理手机号登录
+     */
+    private ResultVO handlePhoneLogin(LoginRequest request) {
+        String phone = request.getPhone();
+        String code = request.getVerificationCode();
+        
+        // 1. 验证短信验证码
+        boolean verified = authService.verifyCode(phone, code);
+        if (!verified) {
+            return ResultVO.error(Constant.Code.PARAM_ERROR, "验证码错误");
+        }
+        
+        // 2. 根据手机号查找用户
+        User user = userService.findByPhone(phone);
+        boolean isNewUser = false;
+        
+        if (user == null) {
+            // 3. 如果用户不存在，创建新用户
+            user = new User();
+            user.setPhone(phone);
+            user.setNickname("用户" + phone.substring(phone.length() - 4));
+            userService.saveUser(user);
+            isNewUser = true;
+        }
+        
+        // 4. 生成JWT token
+        String token = jwtUtil.generateToken(user.getId().toString());
+        
+        // 5. 组装返回数据
+        Map<String, Object> result = new HashMap<>();
+        result.put("token", AuthConstant.TOKEN_PREFIX + token);
+        result.put("userInfo", user);
+        result.put("isNewUser", isNewUser);
+        
+        return ResultVO.success(result);
+    }
+
     /**
      * 用户登出
      * @return 登出结果

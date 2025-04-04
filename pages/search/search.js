@@ -4,165 +4,162 @@ const request = require('../../utils/request.js')
 Page({
   data: {
     keyword: '',
+    searchHistory: [],
+    searchResults: [],
+    showHistory: true,
+    hotKeywords: ['轮胎', '机油', '保养', '电池', '空调'],
     searching: false,
-    results: [],
-    historySearches: [],
-    hotSearches: ['轮胎更换', '机油保养', '刹车片', '空调清洗', '汽车打蜡']
+    noResult: false
   },
 
-  onLoad() {
-    this.getHistorySearches()
-  },
-
-  // 获取历史搜索记录
-  getHistorySearches() {
+  onLoad: function() {
+    // 加载本地存储的搜索历史
     const history = wx.getStorageSync('searchHistory') || []
     this.setData({
-      historySearches: history
+      searchHistory: history
     })
   },
 
-  // 输入搜索关键词
-  onInput(e) {
+  // 输入关键词
+  inputKeyword: function(e) {
+    const keyword = e.detail.value
     this.setData({
-      keyword: e.detail.value
+      keyword: keyword,
+      showHistory: keyword.length === 0
     })
   },
-
-  // 清空输入框
-  clearInput() {
+  
+  // 清空关键词
+  clearKeyword: function() {
     this.setData({
       keyword: '',
-      results: []
+      showHistory: true
     })
   },
 
-  // 执行搜索
-  doSearch() {
-    const { keyword } = this.data
-    if (!keyword.trim()) {
+  // 搜索
+  search: function(e) {
+    let keyword = this.data.keyword
+    
+    // 如果是点击历史记录或热门关键词
+    if (e && e.currentTarget && e.currentTarget.dataset.keyword) {
+      keyword = e.currentTarget.dataset.keyword
+      this.setData({
+        keyword: keyword
+      })
+    }
+    
+    if (!keyword || keyword.trim() === '') {
+      wx.showToast({
+        title: '请输入搜索关键词',
+        icon: 'none'
+      })
       return
     }
-
-    // 记录搜索历史
-    this.saveSearchHistory(keyword)
-
-    // 显示加载状态
-    this.setData({
-      searching: true
-    })
-
-    // 模拟搜索请求
-    setTimeout(() => {
-      // 模拟搜索结果
-      const results = this.getSearchResults(keyword)
-      
-      this.setData({
-        results,
-        searching: false
-      })
-    }, 500)
-  },
-
-  // 点击搜索历史或热门搜索
-  tapSearch(e) {
-    const keyword = e.currentTarget.dataset.keyword
-    this.setData({
-      keyword
-    }, () => {
-      this.doSearch()
-    })
-  },
-
-  // 保存搜索历史
-  saveSearchHistory(keyword) {
-    let history = wx.getStorageSync('searchHistory') || []
     
-    // 如果已存在相同关键词，先移除
+    // 显示搜索中
+    this.setData({
+      searching: true,
+      showHistory: false,
+      noResult: false
+    })
+    
+    // 添加到搜索历史
+    this.addToHistory(keyword)
+    
+    // 调用搜索API
+    request.get('/api/search', {
+      keyword: keyword
+    }, true, false).then(res => {
+      if (res.code === 0) {
+        this.setData({
+          searchResults: res.data,
+          searching: false,
+          noResult: res.data.length === 0
+        })
+      } else {
+        this.handleSearchError()
+      }
+    }).catch(err => {
+      console.error('搜索失败', err)
+      this.handleSearchError()
+    })
+  },
+  
+  // 处理搜索错误
+  handleSearchError: function() {
+    this.setData({
+      searching: false,
+      noResult: true
+    })
+    wx.showToast({
+      title: '搜索失败，请重试',
+      icon: 'none'
+    })
+  },
+  
+  // 添加到搜索历史
+  addToHistory: function(keyword) {
+    let history = this.data.searchHistory
+    
+    // 如果已存在，先移除
     history = history.filter(item => item !== keyword)
     
-    // 添加到开头
+    // 添加到最前面
     history.unshift(keyword)
     
-    // 限制历史记录数量，最多保存10条
+    // 限制最多保存10条历史记录
     if (history.length > 10) {
       history = history.slice(0, 10)
     }
     
-    wx.setStorageSync('searchHistory', history)
-    
+    // 更新页面数据和本地存储
     this.setData({
-      historySearches: history
+      searchHistory: history
     })
+    wx.setStorageSync('searchHistory', history)
   },
-
-  // 清空搜索历史
-  clearHistory() {
+  
+  // 清空历史记录
+  clearHistory: function() {
     wx.showModal({
       title: '提示',
-      content: '确定清空搜索历史？',
+      content: '确定要清空搜索历史吗？',
       success: (res) => {
         if (res.confirm) {
-          wx.removeStorageSync('searchHistory')
           this.setData({
-            historySearches: []
+            searchHistory: []
           })
+          wx.removeStorageSync('searchHistory')
         }
       }
     })
   },
-
-  // 模拟获取搜索结果
-  getSearchResults(keyword) {
-    // 实际应用中应该调用后端API进行搜索
-    const services = [
-      { id: 1, type: 'service', name: '机油更换服务', price: 329, desc: '全合成机油更换，专业服务' },
-      { id: 2, type: 'service', name: '轮胎更换服务', price: 150, desc: '专业轮胎安装，动平衡调整' },
-      { id: 3, type: 'service', name: '刹车系统保养', price: 499, desc: '刹车片更换，刹车油检查' },
-      { id: 4, type: 'service', name: '空调系统清洗', price: 198, desc: '空调系统深度清洁，除菌除异味' }
-    ]
+  
+  // 跳转到搜索结果详情
+  goToDetail: function(e) {
+    const item = e.currentTarget.dataset.item
+    if (!item || !item.type || !item.id) return
     
-    const tires = [
-      { id: 1, type: 'tire', name: '米其林轮胎 PRIMACY 4 ST', price: 688, spec: '215/55R17 94V' },
-      { id: 2, type: 'tire', name: '普利司通轮胎 TURANZA T005', price: 599, spec: '225/45R17 91W' },
-      { id: 3, type: 'tire', name: '固特异轮胎 EAGLE F1', price: 729, spec: '225/45R17 91Y' }
-    ]
-    
-    const parts = [
-      { id: 1, type: 'part', name: '博世刹车片', price: 499, spec: '适用多种车型' },
-      { id: 2, type: 'part', name: '壳牌全合成机油', price: 329, spec: '5W-30 4L装' },
-      { id: 3, type: 'part', name: '曼牌空气滤清器', price: 89, spec: '适用大众、奥迪系列' }
-    ]
-    
-    // 合并所有数据并根据关键词筛选
-    const allData = [...services, ...tires, ...parts]
-    
-    return allData.filter(item => 
-      item.name.toLowerCase().includes(keyword.toLowerCase()) ||
-      (item.desc && item.desc.toLowerCase().includes(keyword.toLowerCase())) ||
-      (item.spec && item.spec.toLowerCase().includes(keyword.toLowerCase()))
-    )
-  },
-
-  // 点击搜索结果
-  tapResult(e) {
-    const { id, type } = e.currentTarget.dataset.item
-    
-    // 根据类型和ID跳转到不同页面
     let url = ''
     
-    if (type === 'service') {
-      url = `/pages/service/detail?id=${id}`
-    } else if (type === 'tire') {
-      url = `/pages/tire/detail?id=${id}`
-    } else if (type === 'part') {
-      url = `/pages/part/detail?id=${id}`
+    // 根据不同类型跳转到不同页面
+    switch(item.type) {
+      case 'service':
+        url = `/pages/service/detail?id=${item.id}`
+        break
+      case 'tire':
+        url = `/pages/tire/detail?id=${item.id}`
+        break
+      case 'store':
+        url = `/pages/store/detail?id=${item.id}`
+        break
+      default:
+        return
     }
     
-    if (url) {
-      wx.navigateTo({
-        url
-      })
-    }
+    wx.navigateTo({
+      url: url
+    })
   }
 }) 

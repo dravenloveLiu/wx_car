@@ -11,6 +11,8 @@ import org.springframework.util.StringUtils;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.carservice.common.Constant;
 import com.carservice.dto.LoginDTO;
 import com.carservice.entity.Car;
@@ -392,13 +394,8 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(Constant.Code.FORBIDDEN, "无权操作此车辆");
         }
         
-        // 逻辑删除，将状态设为禁用
-        car.setStatus(Constant.Status.DISABLED);
-        car.setUpdateTime(LocalDateTime.now());
-        int result = carMapper.updateById(car);
-        
         // 如果删除的是默认车辆，则尝试将另一辆车设为默认
-        if (car.getIsDefault() != null && car.getIsDefault() == 1 && result > 0) {
+        if (car.getIsDefault() != null && car.getIsDefault() == 1) {
             // 查询用户的其他车辆
             LambdaQueryWrapper<Car> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(Car::getUserId, userId);
@@ -417,6 +414,44 @@ public class UserServiceImpl implements UserService {
             }
         }
         
+        // 逻辑删除，将状态设为禁用
+        car.setStatus(Constant.Status.DISABLED);
+        car.setUpdateTime(LocalDateTime.now());
+        int result = carMapper.updateById(car);
+        
         return result > 0;
+    }
+    
+    @Override
+    public User findByOpenid(String openid) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("open_id", openid);
+        return userMapper.selectOne(queryWrapper);
+    }
+    
+    @Override
+    public User findByPhone(String phone) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("phone", phone);
+        return userMapper.selectOne(queryWrapper);
+    }
+    
+    @Override
+    public User saveUser(User user) {
+        if (user.getId() == null) {
+            // 新用户
+            user.setRegisterTime(LocalDateTime.now());
+            user.setMemberLevel(Constant.MemberLevel.NORMAL);
+            user.setPoints(0);
+            userMapper.insert(user);
+            log.info("新用户创建成功: {}", user);
+        } else {
+            // 更新用户
+            // 不更新注册时间
+            userMapper.updateById(user);
+            log.info("用户信息更新成功: {}", user);
+        }
+        
+        return user;
     }
 } 

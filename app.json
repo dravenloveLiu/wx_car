@@ -8,7 +8,9 @@
     "pages/member/index/index",
     "pages/car/add",
     "pages/car/list",
-    "pages/car/edit"
+    "pages/car/edit",
+    "pages/search/search",
+    "pages/car/maintenance"
   ],
   "window": {
     "backgroundTextStyle": "light",

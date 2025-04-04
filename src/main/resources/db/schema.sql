@@ -4,20 +4,25 @@ CREATE DATABASE IF NOT EXISTS car_service DEFAULT CHARACTER SET utf8mb4 COLLATE 
 USE car_service;
 
 -- 用户表
-CREATE TABLE IF NOT EXISTS t_user (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
-    phone VARCHAR(20) COMMENT '手机号',
-    nickname VARCHAR(50) COMMENT '昵称',
-    avatar VARCHAR(255) COMMENT '头像',
-    gender TINYINT DEFAULT 0 COMMENT '性别 0-未知 1-男 2-女',
-    open_id VARCHAR(100) COMMENT '微信openId',
-    token VARCHAR(100) COMMENT '用户token',
-    member_level TINYINT DEFAULT 0 COMMENT '会员等级 0-普通用户 1-银卡会员 2-金卡会员 3-铂金会员',
-    points INT DEFAULT 0 COMMENT '会员积分',
-    register_time DATETIME COMMENT '注册时间',
-    last_login_time DATETIME COMMENT '最后登录时间',
-    UNIQUE KEY idx_phone (phone),
-    UNIQUE KEY idx_open_id (open_id)
+CREATE TABLE IF NOT EXISTS `t_user` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `username` varchar(64) DEFAULT NULL COMMENT '用户名',
+  `password` varchar(64) DEFAULT NULL COMMENT '密码',
+  `name` varchar(64) DEFAULT NULL COMMENT '姓名',
+  `phone` varchar(20) DEFAULT NULL COMMENT '手机号',
+  `email` varchar(64) DEFAULT NULL COMMENT '邮箱',
+  `openid` varchar(64) DEFAULT NULL COMMENT '微信openid',
+  `nickname` varchar(64) DEFAULT NULL COMMENT '微信昵称',
+  `avatar_url` varchar(255) DEFAULT NULL COMMENT '微信头像URL',
+  `gender` tinyint(4) DEFAULT '0' COMMENT '性别：0-未知，1-男，2-女',
+  `status` tinyint(4) DEFAULT '1' COMMENT '状态：0-禁用，1-正常',
+  `deleted` tinyint(4) DEFAULT '0' COMMENT '是否删除：0-否，1-是',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `last_login_time` datetime DEFAULT NULL COMMENT '最后登录时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_phone` (`phone`) USING BTREE,
+  UNIQUE KEY `idx_openid` (`openid`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
 -- 车辆表

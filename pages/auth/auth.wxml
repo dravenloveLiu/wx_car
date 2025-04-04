@@ -1,86 +1,109 @@
 <!--pages/auth/auth.wxml-->
 <view class="container">
   <view class="auth-section">
-    <block wx:if="{{!hasUserInfo}}">
-      <view class="header">
-        <block wx:if="{{logoLoadFailed}}">
-          <view class="logo-placeholder">
-            <text class="logo-text">汽车服务</text>
-          </view>
-        </block>
-        <block wx:else>
-          <image class="logo" src="/images/logo.png" mode="aspectFit" binderror="handleImageError"></image>
-        </block>
-        <text class="title">汽车保养维修</text>
-        <text class="subtitle">为您的爱车提供专业服务</text>
+    <view class="header">
+      <block wx:if="{{logoLoadFailed}}">
+        <view class="logo-placeholder">
+          <text class="logo-text">汽车服务</text>
+        </view>
+      </block>
+      <block wx:else>
+        <image class="logo" src="/images/logo.png" mode="aspectFit" binderror="handleImageError"></image>
+      </block>
+      <text class="title">汽车保养维修</text>
+      <text class="subtitle">为您的爱车提供专业服务</text>
+    </view>
+
+    <view class="login-tabs">
+      <view class="tab {{loginType === 'wechat' ? 'active' : ''}}" bindtap="switchLoginType" data-type="wechat">
+        微信登录
       </view>
-      <button class="auth-btn" 
-              bindtap="getUserProfile"
-              wx:if="{{canIUseGetUserProfile}}">
-        微信授权登录
-      </button>
+      <view class="tab {{loginType === 'phone' ? 'active' : ''}}" bindtap="switchLoginType" data-type="phone">
+        手机号登录
+      </view>
+    </view>
+
+    <block wx:if="{{loginType === 'wechat'}}">
+      <view class="wechat-login">
+        <button class="auth-btn" 
+                bindtap="getUserProfile"
+                wx:if="{{canIUseGetUserProfile && !hasUserInfo}}">
+          授权微信登录
+        </button>
+        <view class="wechat-info" wx:if="{{hasUserInfo}}">
+          <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+          <text class="nickname">{{userInfo.nickName}}</text>
+          <button class="submit-btn" bindtap="wechatLogin">确认登录</button>
+        </view>
+      </view>
+    </block>
+
+    <block wx:if="{{loginType === 'phone'}}">
+      <view class="phone-login">
+        <view class="form-item">
+          <text class="label">手机号</text>
+          <input class="input" 
+                type="number"
+                maxlength="11"
+                placeholder="请输入手机号"
+                data-field="phone"
+                bindinput="inputChange" />
+        </view>
+
+        <view class="form-item verification-code">
+          <view class="form-label">验证码</view>
+          <input class="form-input code-input" 
+                placeholder="请输入验证码" 
+                value="{{formData.code}}"
+                type="number"
+                maxlength="6"
+                data-field="code"
+                bindinput="inputChange" />
+          <view class="get-code-btn {{countdown > 0 ? 'disabled' : ''}}" bindtap="{{countdown > 0 ? '' : 'getVerificationCode'}}">
+            {{countdown > 0 ? countdown + '秒后重发' : '获取验证码'}}
+          </view>
+        </view>
+
+        <button class="submit-btn" bindtap="phoneLogin">确认登录</button>
+      </view>
     </block>
 
     <block wx:if="{{showInfoForm}}">
       <view class="form-section">
         <view class="form-header">
-          <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
-          <text class="nickname">{{userInfo.nickName}}</text>
+          <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+          <text class="nickname">{{userInfo.nickName || '用户'}}</text>
         </view>
 
         <view class="form-group">
           <view class="form-item">
             <text class="label">姓名</text>
             <input class="input" 
-                   type="text"
-                   placeholder="请输入真实姓名"
-                   data-field="name"
-                   bindinput="inputChange" />
-          </view>
-
-          <view class="form-item">
-            <text class="label">手机号</text>
-            <input class="input" 
-                   type="number"
-                   maxlength="11"
-                   placeholder="请输入手机号"
-                   data-field="phone"
-                   bindinput="inputChange" />
-          </view>
-
-          <view class="form-item verification-code">
-            <view class="form-label">验证码</view>
-            <input class="form-input code-input" 
-                   placeholder="请输入验证码" 
-                   value="{{formData.code}}"
-                   type="number"
-                   maxlength="6"
-                   data-field="code"
-                   bindinput="inputChange" />
-            <view class="get-code-btn {{countdown > 0 ? 'disabled' : ''}}" bindtap="{{countdown > 0 ? '' : 'getVerificationCode'}}">
-              {{countdown > 0 ? countdown + '秒后重发' : '获取验证码'}}
-            </view>
+                  type="text"
+                  placeholder="请输入真实姓名"
+                  data-field="name"
+                  bindinput="inputChange" />
           </view>
 
           <view class="form-item">
             <text class="label">车辆信息</text>
             <input class="input" 
-                   type="text"
-                   placeholder="请输入车型/车牌号"
-                   data-field="carInfo"
-                   bindinput="inputChange" />
+                  type="text"
+                  placeholder="请输入车型/车牌号"
+                  data-field="carInfo"
+                  bindinput="inputChange" />
           </view>
-        </view>
-
-        <view class="privacy-policy">
-          <text>登录即表示您已同意</text>
-          <text class="policy-link">《用户协议》</text>
-          <text>和</text>
-          <text class="policy-link">《隐私政策》</text>
         </view>
 
         <button class="submit-btn" bindtap="submitUserInfo">确认提交</button>
       </view>
     </block>
+
+    <view class="privacy-policy">
+      <text>登录即表示您已同意</text>
+      <text class="policy-link">《用户协议》</text>
+      <text>和</text>
+      <text class="policy-link">《隐私政策》</text>
+    </view>
   </view>
 </view>

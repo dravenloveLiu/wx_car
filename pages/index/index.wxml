@@ -65,7 +65,7 @@
           <text class="car-mileage">{{userCar.mileage}}公里</text>
         </view>
       </view>
-      <view class="car-action" bindtap="navigateTo" data-url="/pages/car/maintenance">
+      <view class="car-action" bindtap="navigateTo" data-url="/pages/car/maintenance?id={{userCar.id}}">
         <text>保养记录</text>
       </view>
     </view>

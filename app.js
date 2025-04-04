@@ -5,7 +5,21 @@ App({
     baseUrl: 'http://localhost:8080', // 开发环境API地址，上线前修改为生产环境地址
     token: wx.getStorageSync('token') || '',
     isLogin: false,
-    userCar: null // 存储用户车辆信息
+    userCar: null, // 存储用户车辆信息
+    // 已注册的页面路径，用于检查页面是否存在
+    appPages: [
+      '/pages/index/index',
+      '/pages/logs/logs',
+      '/pages/auth/auth',
+      '/pages/service/service',
+      '/pages/appointment/list/list',
+      '/pages/member/index/index',
+      '/pages/car/add',
+      '/pages/car/list',
+      '/pages/car/edit',
+      '/pages/search/search',
+      '/pages/car/maintenance'
+    ]
   },
   onLaunch() {
     // 展示本地存储能力

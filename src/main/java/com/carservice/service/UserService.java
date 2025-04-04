@@ -69,4 +69,28 @@ public interface UserService {
      * @return 操作结果
      */
     boolean deleteCar(Long id);
+    
+    /**
+     * 根据openid查找用户
+     * 
+     * @param openid 微信用户唯一标识
+     * @return 用户信息
+     */
+    User findByOpenid(String openid);
+    
+    /**
+     * 根据手机号查找用户
+     * 
+     * @param phone 手机号
+     * @return 用户信息
+     */
+    User findByPhone(String phone);
+    
+    /**
+     * 保存用户
+     * 
+     * @param user 用户信息
+     * @return 保存后的用户
+     */
+    User saveUser(User user);
 } 

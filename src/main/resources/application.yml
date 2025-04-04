@@ -67,4 +67,17 @@ logging:
   level:
     com.carservice: debug
     org.springframework: info
-    com.baomidou.mybatisplus: debug 
+    com.baomidou.mybatisplus: debug
+
+# 微信小程序配置
+wx:
+  miniapp:
+    appId: ${WX_APP_ID:wx1979abeb9e3afc43} # 实际开发中请替换为真实的AppID
+    appSecret: ${WX_APP_SECRET:393cc41a90f3edcf81e8534b16a10a16} # 实际开发中请替换为真实的AppSecret
+
+# JWT配置
+jwt:
+  # JWT加密密钥
+  secret: ${JWT_SECRET:carservice@jwt!secret#2023}
+  # 令牌过期时间（秒）- 30天
+  expiration: 2592000 

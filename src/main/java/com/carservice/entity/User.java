@@ -72,4 +72,9 @@ public class User {
      * 最后登录时间
      */
     private LocalDateTime lastLoginTime;
+    
+    /**
+     * 微信头像URL
+     */
+    private String avatarUrl;
 } 

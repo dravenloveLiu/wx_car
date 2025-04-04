@@ -1,2 +1,75 @@
 <!--pages/car/maintenance.wxml-->
-<text>pages/car/maintenance.wxml</text>
+<view class="container">
+  <!-- 车辆信息卡片 -->
+  <view class="car-card" wx:if="{{car}}">
+    <view class="car-info">
+      <view class="car-avatar">
+        <view class="car-brand">{{car.brand[0]}}</view>
+      </view>
+      <view class="car-detail">
+        <view class="car-name">{{car.brand}} {{car.model}}</view>
+        <view class="car-plate">{{car.plateNumber}}</view>
+        <view class="car-meta">
+          <text class="car-year">{{car.year}}年</text>
+          <text class="car-mileage">{{car.mileage}}公里</text>
+        </view>
+      </view>
+    </view>
+    <view class="car-action" bindtap="viewCarDetail">查看详情</view>
+  </view>
+
+  <!-- 保养记录列表 -->
+  <view class="maintenance-container">
+    <view class="section-header">
+      <text class="section-title">保养记录</text>
+      <view class="add-record" bindtap="addRecord">+ 添加记录</view>
+    </view>
+
+    <!-- 加载中 -->
+    <view class="loading-container" wx:if="{{loading}}">
+      <view class="loading">
+        <view class="loading-icon"></view>
+        <text>加载中...</text>
+      </view>
+    </view>
+
+    <!-- 无记录 -->
+    <view class="empty-records" wx:elif="{{maintenanceRecords.length === 0}}">
+      <view class="empty-icon">📝</view>
+      <text class="empty-text">暂无保养记录</text>
+      <text class="empty-subtext">您可以记录车辆的保养历史</text>
+      <view class="add-button" bindtap="addRecord">添加保养记录</view>
+    </view>
+
+    <!-- 记录列表 -->
+    <view class="record-list" wx:else>
+      <view class="record-item" 
+            wx:for="{{maintenanceRecords}}" 
+            wx:key="id"
+            bindtap="goToDetail"
+            data-id="{{item.id}}">
+        <view class="record-date">
+          <text class="record-day">{{item.day}}</text>
+          <text class="record-month">{{item.month}}月</text>
+          <text class="record-year">{{item.year}}</text>
+        </view>
+        <view class="record-info">
+          <view class="record-type">{{item.maintenanceType}}</view>
+          <view class="record-desc">{{item.description}}</view>
+          <view class="record-meta">
+            <text class="record-mileage">里程：{{item.mileage}}公里</text>
+            <text class="record-price" wx:if="{{item.cost}}">¥{{item.cost}}</text>
+          </view>
+        </view>
+        <view class="record-arrow">
+          <text class="arrow">></text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="bottom-btn" wx:if="{{!loading && maintenanceRecords.length > 0}}">
+    <button class="add-record-btn" bindtap="addRecord">添加保养记录</button>
+  </view>
+</view>
