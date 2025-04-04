@@ -1,0 +1,54 @@
+<view class="container">
+  <view class="appointment-list">
+    <block wx:if="{{!loading && appointments.length === 0}}">
+      <view class="empty-state">
+        <text>暂无预约记录</text>
+        <navigator url="/pages/appointment/create/create" class="create-btn">立即预约</navigator>
+      </view>
+    </block>
+
+    <block wx:else>
+      <view class="appointment-item" wx:for="{{appointments}}" wx:key="_id">
+        <view class="appointment-header">
+          <text class="service-type">{{item.serviceType}}</text>
+          <text class="status {{getStatusClass(item.status)}}">{{item.status}}</text>
+        </view>
+
+        <view class="appointment-content">
+          <view class="info-row">
+            <text class="label">预约时间：</text>
+            <text class="value">{{item.date}} {{item.time}}</text>
+          </view>
+          
+          <view class="info-row">
+            <text class="label">车辆信息：</text>
+            <text class="value">{{item.carInfo}}</text>
+          </view>
+
+          <view class="info-row">
+            <text class="label">联系人：</text>
+            <text class="value">{{item.contact}}</text>
+          </view>
+
+          <view class="info-row">
+            <text class="label">联系电话：</text>
+            <text class="value">{{item.phone}}</text>
+          </view>
+
+          <view class="info-row" wx:if="{{item.description}}">
+            <text class="label">问题描述：</text>
+            <text class="value description">{{item.description}}</text>
+          </view>
+        </view>
+
+        <view class="appointment-footer" wx:if="{{item.status === '待确认'}}">
+          <view class="cancel-btn" bindtap="cancelAppointment" data-id="{{item._id}}">取消预约</view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <navigator url="/pages/appointment/create/create" class="float-btn" wx:if="{{appointments.length > 0}}">
+    <text>新增预约</text>
+  </navigator>
+</view> 

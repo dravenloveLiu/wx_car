@@ -1,0 +1,59 @@
+<view class="container">
+  <!-- 筛选区域 -->
+  <view class="filter-section">
+    <!-- 品牌筛选 -->
+    <scroll-view class="filter-row" scroll-x>
+      <view class="filter-item {{selectedBrand?.id === brand.id ? 'active' : ''}}"
+            wx:for="{{brands}}" 
+            wx:key="id"
+            wx:for-item="brand"
+            bindtap="selectBrand"
+            data-brand="{{brand}}">
+        {{brand.name}}
+      </view>
+    </scroll-view>
+
+    <!-- 车型筛选 -->
+    <scroll-view class="filter-row" scroll-x>
+      <view class="filter-item {{selectedCarType?.id === carType.id ? 'active' : ''}}"
+            wx:for="{{carTypes}}" 
+            wx:key="id"
+            wx:for-item="carType"
+            bindtap="selectCarType"
+            data-car-type="{{carType}}">
+        {{carType.name}}
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 轮胎列表 -->
+  <view class="tire-list">
+    <view class="tire-item"
+          wx:for="{{tires}}"
+          wx:key="id"
+          bindtap="navigateToDetail"
+          data-id="{{item.id}}">
+      <image class="tire-image" src="{{item.imageUrl}}" mode="aspectFit"></image>
+      <view class="tire-info">
+        <text class="tire-name">{{item.name}}</text>
+        <text class="tire-brand">{{item.brand}}</text>
+        <text class="tire-spec">{{item.specification}}</text>
+        <view class="tire-bottom">
+          <text class="tire-price">¥{{item.price}}</text>
+          <text class="tire-sales">已售{{item.sales}}件</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+  <view class="no-more" wx:if="{{!hasMore && tires.length > 0}}">
+    <text>没有更多了</text>
+  </view>
+  <view class="empty" wx:if="{{!loading && tires.length === 0}}">
+    <text>暂无数据</text>
+  </view>
+</view> 

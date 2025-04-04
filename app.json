@@ -1,0 +1,57 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/auth/auth",
+    "pages/car/car",
+    "pages/service/service",
+    "pages/tire/tire",
+    "pages/tire/list/list",
+    "pages/appointment/create/create",
+    "pages/appointment/list/list",
+    "pages/member/index/index",
+    "pages/member/points/points",
+    "pages/member/coupons/coupons",
+    "pages/member/wallet/wallet",
+    "pages/member/mall/mall"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "汽车保养维修",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#e74c3c",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tabbar/home.png",
+        "selectedIconPath": "images/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/service/service",
+        "text": "服务",
+        "iconPath": "images/tabbar/service.png",
+        "selectedIconPath": "images/tabbar/service-active.png"
+      },
+      {
+        "pagePath": "pages/appointment/list/list",
+        "text": "预约",
+        "iconPath": "images/tabbar/appointment.png",
+        "selectedIconPath": "images/tabbar/appointment-active.png"
+      },
+      {
+        "pagePath": "pages/member/index/index",
+        "text": "会员",
+        "iconPath": "images/tabbar/member.png",
+        "selectedIconPath": "images/tabbar/member-active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+} 

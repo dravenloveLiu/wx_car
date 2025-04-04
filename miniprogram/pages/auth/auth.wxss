@@ -1,0 +1,53 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 30rpx;
+  background-color: #fff;
+}
+
+.header {
+  margin-top: 100rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  width: 200rpx;
+  height: 200rpx;
+}
+
+.title {
+  margin-top: 20rpx;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.content {
+  margin-top: 80rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.desc {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+}
+
+.footer {
+  margin-top: 100rpx;
+  width: 100%;
+}
+
+.auth-btn {
+  width: 100% !important;
+  height: 88rpx;
+  line-height: 88rpx;
+  font-size: 32rpx;
+  border-radius: 44rpx;
+} 

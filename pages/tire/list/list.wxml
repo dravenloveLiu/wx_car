@@ -1,0 +1,197 @@
+<view class="container">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrapper">
+      <image class="search-icon" src="/images/icons/search.svg"></image>
+      <input class="search-input" placeholder="搜索轮胎品牌、型号" bindinput="onSearchInput" value="{{searchKey}}" confirm-type="search" bindconfirm="onSearch" />
+      <image wx:if="{{searchKey}}" class="clear-icon" src="/images/icons/clear.svg" bindtap="clearSearch"></image>
+    </view>
+  </view>
+
+  <!-- 筛选区域 -->
+  <view class="filter-container">
+    <scroll-view scroll-x class="filter-scroll" show-scrollbar="{{false}}">
+      <!-- 品牌筛选 -->
+      <view class="filter-item {{activeFilter === 'brand' ? 'active' : ''}}" bindtap="toggleFilter" data-filter="brand">
+        <text>品牌</text>
+        <image class="arrow-icon" src="/images/icons/arrow-{{activeFilter === 'brand' ? 'up' : 'down'}}.svg"></image>
+      </view>
+      
+      <!-- 尺寸筛选 -->
+      <view class="filter-item {{activeFilter === 'size' ? 'active' : ''}}" bindtap="toggleFilter" data-filter="size">
+        <text>尺寸</text>
+        <image class="arrow-icon" src="/images/icons/arrow-{{activeFilter === 'size' ? 'up' : 'down'}}.svg"></image>
+      </view>
+      
+      <!-- 价格筛选 -->
+      <view class="filter-item {{activeFilter === 'price' ? 'active' : ''}}" bindtap="toggleFilter" data-filter="price">
+        <text>价格</text>
+        <image class="arrow-icon" src="/images/icons/arrow-{{activeFilter === 'price' ? 'up' : 'down'}}.svg"></image>
+      </view>
+      
+      <!-- 季节筛选 -->
+      <view class="filter-item {{activeFilter === 'season' ? 'active' : ''}}" bindtap="toggleFilter" data-filter="season">
+        <text>季节</text>
+        <image class="arrow-icon" src="/images/icons/arrow-{{activeFilter === 'season' ? 'up' : 'down'}}.svg"></image>
+      </view>
+      
+      <!-- 类型筛选 -->
+      <view class="filter-item {{activeFilter === 'type' ? 'active' : ''}}" bindtap="toggleFilter" data-filter="type">
+        <text>类型</text>
+        <image class="arrow-icon" src="/images/icons/arrow-{{activeFilter === 'type' ? 'up' : 'down'}}.svg"></image>
+      </view>
+    </scroll-view>
+
+    <!-- 筛选下拉面板 -->
+    <view class="filter-panel" wx:if="{{activeFilter}}">
+      <!-- 品牌筛选面板 -->
+      <view class="filter-panel-content" wx:if="{{activeFilter === 'brand'}}">
+        <view class="brand-list">
+          <view class="brand-item {{selectedBrand === item.id ? 'selected' : ''}}" 
+                wx:for="{{brands}}" wx:key="id" 
+                bindtap="selectBrand" data-id="{{item.id}}">
+            <image class="brand-logo" src="{{item.logo}}" mode="aspectFit"></image>
+            <text class="brand-name">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 尺寸筛选面板 -->
+      <view class="filter-panel-content" wx:if="{{activeFilter === 'size'}}">
+        <view class="size-filter">
+          <view class="size-label">宽度(mm)</view>
+          <view class="size-options">
+            <view class="size-option {{selectedWidth === item ? 'selected' : ''}}" 
+                  wx:for="{{widthOptions}}" wx:key="*this" 
+                  bindtap="selectWidth" data-width="{{item}}">{{item}}</view>
+          </view>
+        </view>
+        <view class="size-filter">
+          <view class="size-label">扁平比(%)</view>
+          <view class="size-options">
+            <view class="size-option {{selectedRatio === item ? 'selected' : ''}}" 
+                  wx:for="{{ratioOptions}}" wx:key="*this" 
+                  bindtap="selectRatio" data-ratio="{{item}}">{{item}}</view>
+          </view>
+        </view>
+        <view class="size-filter">
+          <view class="size-label">直径(英寸)</view>
+          <view class="size-options">
+            <view class="size-option {{selectedDiameter === item ? 'selected' : ''}}" 
+                  wx:for="{{diameterOptions}}" wx:key="*this" 
+                  bindtap="selectDiameter" data-diameter="{{item}}">{{item}}</view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 价格筛选面板 -->
+      <view class="filter-panel-content" wx:if="{{activeFilter === 'price'}}">
+        <view class="price-options">
+          <view class="price-option {{selectedPrice === item.value ? 'selected' : ''}}" 
+                wx:for="{{priceOptions}}" wx:key="value" 
+                bindtap="selectPrice" data-price="{{item.value}}">{{item.label}}</view>
+        </view>
+      </view>
+      
+      <!-- 季节筛选面板 -->
+      <view class="filter-panel-content" wx:if="{{activeFilter === 'season'}}">
+        <view class="season-options">
+          <view class="season-option {{selectedSeason === item.value ? 'selected' : ''}}" 
+                wx:for="{{seasonOptions}}" wx:key="value" 
+                bindtap="selectSeason" data-season="{{item.value}}">
+            <text>{{item.label}}</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 类型筛选面板 -->
+      <view class="filter-panel-content" wx:if="{{activeFilter === 'type'}}">
+        <view class="type-options">
+          <view class="type-option {{selectedType === item.value ? 'selected' : ''}}" 
+                wx:for="{{typeOptions}}" wx:key="value" 
+                bindtap="selectType" data-type="{{item.value}}">{{item.label}}</view>
+        </view>
+      </view>
+      
+      <!-- 筛选操作按钮 -->
+      <view class="filter-actions">
+        <button class="reset-btn" bindtap="resetFilter">重置</button>
+        <button class="confirm-btn" bindtap="confirmFilter">确定</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 已选筛选条件标签 -->
+  <view class="selected-filters" wx:if="{{selectedFiltersCount > 0}}">
+    <view class="selected-filter-tag" wx:if="{{selectedBrand !== null}}">
+      <text>{{selectedBrandName}}</text>
+      <image class="tag-close" src="/images/icons/close.svg" bindtap="clearBrand"></image>
+    </view>
+    <view class="selected-filter-tag" wx:if="{{selectedWidth !== null}}">
+      <text>宽度: {{selectedWidth}}mm</text>
+      <image class="tag-close" src="/images/icons/close.svg" bindtap="clearWidth"></image>
+    </view>
+    <view class="selected-filter-tag" wx:if="{{selectedRatio !== null}}">
+      <text>扁平比: {{selectedRatio}}%</text>
+      <image class="tag-close" src="/images/icons/close.svg" bindtap="clearRatio"></image>
+    </view>
+    <view class="selected-filter-tag" wx:if="{{selectedDiameter !== null}}">
+      <text>直径: {{selectedDiameter}}英寸</text>
+      <image class="tag-close" src="/images/icons/close.svg" bindtap="clearDiameter"></image>
+    </view>
+    <view class="selected-filter-tag" wx:if="{{selectedPrice !== null}}">
+      <text>{{selectedPriceLabel}}</text>
+      <image class="tag-close" src="/images/icons/close.svg" bindtap="clearPrice"></image>
+    </view>
+    <view class="selected-filter-tag" wx:if="{{selectedSeason !== null}}">
+      <text>{{selectedSeasonLabel}}</text>
+      <image class="tag-close" src="/images/icons/close.svg" bindtap="clearSeason"></image>
+    </view>
+    <view class="selected-filter-tag" wx:if="{{selectedType !== null}}">
+      <text>{{selectedTypeLabel}}</text>
+      <image class="tag-close" src="/images/icons/close.svg" bindtap="clearType"></image>
+    </view>
+    <view class="clear-all-tag" bindtap="clearAllFilters">
+      <text>清除全部</text>
+    </view>
+  </view>
+
+  <!-- 轮胎列表 -->
+  <view class="tire-list" wx:if="{{tires.length > 0}}">
+    <view class="tire-item" wx:for="{{tires}}" wx:key="id" bindtap="navigateToDetail" data-id="{{item.id}}">
+      <image class="tire-image" src="{{item.image}}" mode="aspectFit"></image>
+      <view class="tire-info">
+        <view class="tire-brand">{{item.brand}}</view>
+        <view class="tire-name">{{item.name}}</view>
+        <view class="tire-specs">{{item.width}}/{{item.ratio}}R{{item.diameter}} {{item.loadIndex}}{{item.speedIndex}}</view>
+        <view class="tire-desc">{{item.description}}</view>
+        <view class="tire-tags">
+          <text class="tire-tag {{item.season}}">{{seasonMap[item.season]}}</text>
+          <text class="tire-tag {{item.type}}">{{typeMap[item.type]}}</text>
+        </view>
+      </view>
+      <view class="tire-price-box">
+        <view class="tire-price">¥{{item.price}}</view>
+        <view class="tire-original-price" wx:if="{{item.originalPrice}}">¥{{item.originalPrice}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:else>
+    <image class="empty-icon" src="/images/icons/empty.svg"></image>
+    <text class="empty-text">没有找到符合条件的轮胎</text>
+    <text class="empty-tip">请尝试更换筛选条件</text>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="loading-more" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <!-- 回到顶部按钮 -->
+  <view class="back-to-top" wx:if="{{showBackToTop}}" bindtap="scrollToTop">
+    <image src="/images/icons/arrow-up.svg"></image>
+  </view>
+</view> 

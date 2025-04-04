@@ -1,0 +1,48 @@
+<view class="container">
+  <!-- 用户信息区域 -->
+  <view class="user-section">
+    <view class="user-info">
+      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      <view class="info">
+        <text class="nickname">{{userInfo.nickName}}</text>
+        <text class="level">{{memberInfo.level}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 会员资产区域 -->
+  <view class="assets-section">
+    <view class="asset-item" bindtap="navigateTo" data-url="/pages/member/points/points">
+      <text class="value">{{memberInfo.points}}</text>
+      <text class="label">积分</text>
+    </view>
+    <view class="asset-item" bindtap="navigateTo" data-url="/pages/member/wallet/wallet">
+      <text class="value">{{memberInfo.balance}}</text>
+      <text class="label">余额</text>
+    </view>
+    <view class="asset-item" bindtap="navigateTo" data-url="/pages/member/coupons/coupons">
+      <text class="value">{{memberInfo.coupons.unused}}</text>
+      <text class="label">优惠券</text>
+    </view>
+  </view>
+
+  <!-- 功能区域 -->
+  <view class="services-section">
+    <view class="section-title">我的服务</view>
+    <view class="services-grid">
+      <view class="service-item" 
+            wx:for="{{services}}" 
+            wx:key="name"
+            bindtap="navigateTo"
+            data-url="{{item.url}}">
+        <image class="icon" src="/images/member/{{item.icon}}.png" mode="aspectFit"></image>
+        <text class="name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 充值按钮 -->
+  <view class="recharge-btn" bindtap="showRecharge">
+    <text>在线充值</text>
+  </view>
+</view> 

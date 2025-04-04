@@ -1,0 +1,472 @@
+.container {
+  padding: 0;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* 搜索栏样式 */
+.search-bar {
+  padding: 16rpx 30rpx;
+  background-color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.search-input-wrapper {
+  height: 72rpx;
+  background-color: #f5f5f5;
+  border-radius: 36rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 24rpx;
+}
+
+.search-icon {
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 16rpx;
+  opacity: 0.5;
+}
+
+.search-input {
+  flex: 1;
+  height: 72rpx;
+  font-size: 28rpx;
+}
+
+.clear-icon {
+  width: 32rpx;
+  height: 32rpx;
+  opacity: 0.5;
+}
+
+/* 筛选区域样式 */
+.filter-container {
+  position: relative;
+  z-index: 9;
+}
+
+.filter-scroll {
+  background-color: #fff;
+  padding: 0 20rpx;
+  white-space: nowrap;
+  border-bottom: 1rpx solid #eee;
+}
+
+.filter-item {
+  display: inline-flex;
+  align-items: center;
+  padding: 24rpx 30rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.filter-item.active {
+  color: #e74c3c;
+  font-weight: 500;
+}
+
+.arrow-icon {
+  width: 24rpx;
+  height: 24rpx;
+  margin-left: 8rpx;
+}
+
+/* 筛选面板样式 */
+.filter-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 6rpx 16rpx rgba(0, 0, 0, 0.1);
+  border-bottom-left-radius: 16rpx;
+  border-bottom-right-radius: 16rpx;
+  max-height: 60vh;
+  overflow: auto;
+}
+
+.filter-panel-content {
+  padding: 30rpx;
+}
+
+/* 品牌筛选样式 */
+.brand-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20rpx;
+}
+
+.brand-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+  border: 1rpx solid #eee;
+  border-radius: 8rpx;
+}
+
+.brand-item.selected {
+  border-color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.05);
+}
+
+.brand-logo {
+  width: 80rpx;
+  height: 80rpx;
+  margin-bottom: 12rpx;
+}
+
+.brand-name {
+  font-size: 24rpx;
+  color: #333;
+  text-align: center;
+}
+
+/* 尺寸筛选样式 */
+.size-filter {
+  margin-bottom: 24rpx;
+}
+
+.size-filter:last-child {
+  margin-bottom: 0;
+}
+
+.size-label {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 16rpx;
+}
+
+.size-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.size-option {
+  padding: 12rpx 24rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+  color: #333;
+}
+
+.size-option.selected {
+  border-color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.05);
+  color: #e74c3c;
+}
+
+/* 价格筛选样式 */
+.price-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.price-option {
+  padding: 20rpx;
+  border: 1rpx solid #eee;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.price-option.selected {
+  border-color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.05);
+  color: #e74c3c;
+}
+
+/* 季节筛选样式 */
+.season-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+
+.season-option {
+  padding: 16rpx 30rpx;
+  border: 1rpx solid #eee;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.season-option.selected {
+  border-color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.05);
+  color: #e74c3c;
+}
+
+/* 类型筛选样式 */
+.type-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.type-option {
+  padding: 20rpx;
+  border: 1rpx solid #eee;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.type-option.selected {
+  border-color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.05);
+  color: #e74c3c;
+}
+
+/* 筛选操作按钮样式 */
+.filter-actions {
+  display: flex;
+  padding: 24rpx 30rpx;
+  border-top: 1rpx solid #eee;
+}
+
+.reset-btn, .confirm-btn {
+  flex: 1;
+  margin: 0;
+  font-size: 28rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 8rpx;
+}
+
+.reset-btn {
+  background-color: #f5f5f5;
+  color: #666;
+  margin-right: 20rpx;
+}
+
+.confirm-btn {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+/* 已选筛选条件标签样式 */
+.selected-filters {
+  padding: 16rpx 30rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  background-color: #fff;
+}
+
+.selected-filter-tag, .clear-all-tag {
+  display: flex;
+  align-items: center;
+  padding: 8rpx 16rpx;
+  background-color: #f5f5f5;
+  border-radius: 6rpx;
+  font-size: 24rpx;
+  color: #666;
+}
+
+.tag-close {
+  width: 24rpx;
+  height: 24rpx;
+  margin-left: 8rpx;
+  opacity: 0.7;
+}
+
+.clear-all-tag {
+  color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+/* 轮胎列表样式 */
+.tire-list {
+  padding: 16rpx 30rpx;
+}
+
+.tire-item {
+  display: flex;
+  padding: 24rpx;
+  background-color: #fff;
+  margin-bottom: 20rpx;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.tire-image {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 6rpx;
+  margin-right: 20rpx;
+}
+
+.tire-info {
+  flex: 1;
+  position: relative;
+}
+
+.tire-brand {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.tire-name {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+  margin: 8rpx 0;
+}
+
+.tire-specs {
+  font-size: 26rpx;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.tire-desc {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 12rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.tire-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.tire-tag {
+  padding: 4rpx 12rpx;
+  border-radius: 4rpx;
+  font-size: 22rpx;
+  display: inline-block;
+}
+
+.tire-tag.summer {
+  background-color: #fef2f2;
+  color: #e74c3c;
+}
+
+.tire-tag.winter {
+  background-color: #ebf8ff;
+  color: #3498db;
+}
+
+.tire-tag.all-season {
+  background-color: #edf8f4;
+  color: #27ae60;
+}
+
+.tire-tag.performance {
+  background-color: #fef5e7;
+  color: #f39c12;
+}
+
+.tire-tag.touring {
+  background-color: #e9f7ef;
+  color: #2ecc71;
+}
+
+.tire-tag.suv {
+  background-color: #f6e6f8;
+  color: #9b59b6;
+}
+
+.tire-price-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-left: 20rpx;
+}
+
+.tire-price {
+  font-size: 36rpx;
+  font-weight: 500;
+  color: #e74c3c;
+}
+
+.tire-original-price {
+  font-size: 24rpx;
+  color: #999;
+  text-decoration: line-through;
+}
+
+/* 空状态样式 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 0;
+}
+
+.empty-icon {
+  width: 160rpx;
+  height: 160rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+}
+
+.empty-tip {
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* 加载更多样式 */
+.loading-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30rpx 0;
+}
+
+.loading-spinner {
+  width: 40rpx;
+  height: 40rpx;
+  border: 4rpx solid #f3f3f3;
+  border-top: 4rpx solid #e74c3c;
+  border-radius: 50%;
+  margin-right: 16rpx;
+  animation: spin 1s linear infinite;
+}
+
+.loading-more text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 回到顶部按钮样式 */
+.back-to-top {
+  position: fixed;
+  right: 30rpx;
+  bottom: 60rpx;
+  width: 80rpx;
+  height: 80rpx;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-to-top image {
+  width: 40rpx;
+  height: 40rpx;
+} 

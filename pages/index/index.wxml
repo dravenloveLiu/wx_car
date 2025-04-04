@@ -1,0 +1,64 @@
+<view class="container">
+  <!-- 轮播图 -->
+  <swiper class="banner" 
+          indicator-dots="{{true}}"
+          autoplay="{{true}}"
+          interval="{{3000}}"
+          duration="{{500}}"
+          circular="{{true}}"
+          indicator-color="rgba(255, 255, 255, 0.6)"
+          indicator-active-color="#ffffff">
+    <swiper-item wx:for="{{banners}}" 
+                 wx:key="id"
+                 bindtap="navigateTo"
+                 data-url="{{item.link}}">
+      <view class="banner-item" style="background-color: {{item.backgroundColor}}">
+        <view class="banner-content">
+          <text class="banner-title">{{item.title}}</text>
+          <text class="banner-desc">{{item.desc}}</text>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 服务分类 -->
+  <view class="services">
+    <view class="service-item" 
+          wx:for="{{services}}" 
+          wx:key="id" 
+          bindtap="navigateTo" 
+          data-url="{{item.url}}"
+          style="background-color: {{item.backgroundColor}}">
+      <text class="service-name">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 热门轮胎 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">热门轮胎</text>
+      <view class="more" bindtap="navigateTo" data-url="/pages/tire/list/list">
+        <text>更多</text>
+        <text class="arrow">></text>
+      </view>
+    </view>
+    <scroll-view class="tire-list" scroll-x>
+      <view class="tire-item" 
+            wx:for="{{hotTires}}" 
+            wx:key="id"
+            bindtap="navigateTo"
+            data-url="/pages/tire/detail?id={{item.id}}">
+        <view class="tire-image" style="background-color: {{item.backgroundColor}}">
+          <text class="tire-brand">{{item.name.split(' ')[0]}}</text>
+        </view>
+        <text class="tire-name">{{item.name}}</text>
+        <text class="tire-price">¥{{item.price}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 预约按钮 -->
+  <view class="appointment-btn" bindtap="makeAppointment">
+    <text>立即预约</text>
+  </view>
+</view> 

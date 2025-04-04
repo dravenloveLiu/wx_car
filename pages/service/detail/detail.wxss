@@ -1,0 +1,265 @@
+.container {
+  padding: 0;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding-bottom: 120rpx;
+}
+
+/* 服务卡片样式 */
+.service-card {
+  background-color: #fff;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.service-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.service-type {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+}
+
+.service-status {
+  font-size: 26rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  background-color: #f5f5f5;
+}
+
+.service-status.waiting { color: #999; background-color: #f5f5f5; }
+.service-status.checking { color: #f39c12; background-color: #fef5e7; }
+.service-status.repairing { color: #3498db; background-color: #ebf5fb; }
+.service-status.testing { color: #2ecc71; background-color: #eafaf1; }
+.service-status.completed { color: #27ae60; background-color: #e9f7ef; }
+
+.car-info {
+  border-top: 1rpx solid #f0f0f0;
+  padding-top: 24rpx;
+}
+
+.info-item {
+  display: flex;
+  margin-bottom: 12rpx;
+}
+
+.info-item:last-child {
+  margin-bottom: 0;
+}
+
+/* 进度时间轴样式 */
+.progress-timeline {
+  background-color: #fff;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.timeline-item {
+  position: relative;
+  display: flex;
+  padding-bottom: 40rpx;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-dot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background-color: #ddd;
+  margin-top: 8rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 9rpx;
+  top: 28rpx;
+  width: 2rpx;
+  height: calc(100% - 28rpx);
+  background-color: #ddd;
+}
+
+.timeline-content {
+  margin-left: 20rpx;
+  flex: 1;
+}
+
+.step-name {
+  font-size: 28rpx;
+  color: #333;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.step-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 完成状态样式 */
+.timeline-item.completed .timeline-dot {
+  background-color: #27ae60;
+}
+
+.timeline-item.completed .timeline-line {
+  background-color: #27ae60;
+}
+
+.timeline-item.completed .step-name {
+  color: #27ae60;
+}
+
+/* 当前状态样式 */
+.timeline-item.current .timeline-dot {
+  background-color: #e74c3c;
+  box-shadow: 0 0 0 6rpx rgba(231, 76, 60, 0.2);
+}
+
+.timeline-item.current .step-name {
+  color: #e74c3c;
+  font-weight: 500;
+}
+
+/* 详情卡片样式 */
+.detail-card, .current-step-card {
+  background-color: #fff;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 24rpx;
+}
+
+.detail-list .detail-item {
+  display: flex;
+  margin-bottom: 16rpx;
+}
+
+.detail-list .detail-item:last-child {
+  margin-bottom: 0;
+}
+
+.label {
+  width: 160rpx;
+  color: #999;
+  font-size: 26rpx;
+}
+
+.value {
+  flex: 1;
+  color: #333;
+  font-size: 26rpx;
+}
+
+.value.price {
+  color: #e74c3c;
+  font-weight: 500;
+}
+
+/* 当前环节信息样式 */
+.step-info {
+  background-color: #f8f9fa;
+  padding: 20rpx;
+  border-radius: 8rpx;
+}
+
+.step-desc {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+}
+
+.technician-info {
+  display: flex;
+  align-items: center;
+}
+
+.technician-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  margin-right: 16rpx;
+}
+
+.technician-detail {
+  flex: 1;
+}
+
+.technician-name {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  display: block;
+}
+
+.technician-title {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 底部操作栏样式 */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  padding: 20rpx 30rpx;
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.contact-btn {
+  background-color: #e74c3c;
+  color: #fff;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-btn .icon {
+  margin-right: 8rpx;
+}
+
+/* 加载中状态样式 */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 0;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid #f3f3f3;
+  border-top: 4rpx solid #e74c3c;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  margin-top: 20rpx;
+  font-size: 28rpx;
+  color: #999;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+} 

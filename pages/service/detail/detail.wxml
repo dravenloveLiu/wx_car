@@ -1,0 +1,92 @@
+<view class="container">
+  <block wx:if="{{!loading && serviceInfo}}">
+    <!-- 服务基本信息 -->
+    <view class="service-card">
+      <view class="service-header">
+        <text class="service-type">{{serviceInfo.serviceType}}</text>
+        <text class="service-status {{serviceInfo.status}}">{{steps[currentStepIndex].name}}</text>
+      </view>
+      
+      <view class="car-info">
+        <view class="info-item">
+          <text class="label">车型：</text>
+          <text class="value">{{serviceInfo.carModel}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">车牌：</text>
+          <text class="value">{{serviceInfo.plateNumber}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 进度时间轴 -->
+    <view class="progress-timeline">
+      <view class="timeline-item {{getStepStyle(index)}}" wx:for="{{steps}}" wx:key="status">
+        <view class="timeline-dot"></view>
+        <view class="timeline-content">
+          <text class="step-name">{{item.name}}</text>
+          <text class="step-time" wx:if="{{serviceInfo.timeline[item.status]}}">
+            {{formatDate(serviceInfo.timeline[item.status])}}
+          </text>
+        </view>
+        <view class="timeline-line" wx:if="{{index < steps.length - 1}}"></view>
+      </view>
+    </view>
+
+    <!-- 服务详情 -->
+    <view class="detail-card">
+      <view class="card-title">服务详情</view>
+      <view class="detail-list">
+        <view class="detail-item">
+          <text class="label">服务项目：</text>
+          <text class="value">{{serviceInfo.serviceItems}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="label">开始时间：</text>
+          <text class="value">{{formatDate(serviceInfo.startTime)}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="label">预计完成：</text>
+          <text class="value">{{formatDate(serviceInfo.estimatedFinishTime)}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="label">服务金额：</text>
+          <text class="value price">¥{{serviceInfo.price}}</text>
+        </view>
+        <view class="detail-item" wx:if="{{serviceInfo.notes}}">
+          <text class="label">备注：</text>
+          <text class="value">{{serviceInfo.notes}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 当前环节信息 -->
+    <view class="current-step-card" wx:if="{{serviceInfo.currentStepInfo}}">
+      <view class="card-title">当前环节</view>
+      <view class="step-info">
+        <view class="step-desc">{{serviceInfo.currentStepInfo.description}}</view>
+        <view class="technician-info" wx:if="{{serviceInfo.currentStepInfo.technician}}">
+          <image class="technician-avatar" src="{{serviceInfo.currentStepInfo.technician.avatar}}" mode="aspectFill"></image>
+          <view class="technician-detail">
+            <text class="technician-name">{{serviceInfo.currentStepInfo.technician.name}}</text>
+            <text class="technician-title">{{serviceInfo.currentStepInfo.technician.title}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部操作栏 -->
+    <view class="bottom-bar">
+      <button class="contact-btn" bindtap="contactService">
+        <text class="icon">📞</text>
+        联系客服
+      </button>
+    </view>
+  </block>
+
+  <!-- 加载中状态 -->
+  <view class="loading-state" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+</view> 

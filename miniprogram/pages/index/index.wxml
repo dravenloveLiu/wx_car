@@ -1,0 +1,47 @@
+<view class="container">
+  <!-- 轮播图 -->
+  <swiper class="banner" indicator-dots autoplay circular>
+    <swiper-item wx:for="{{banners}}" wx:key="id">
+      <image src="{{item.imageUrl}}" mode="aspectFill"></image>
+    </swiper-item>
+  </swiper>
+
+  <!-- 服务分类 -->
+  <view class="services">
+    <view class="service-item" 
+          wx:for="{{services}}" 
+          wx:key="id" 
+          bindtap="navigateTo" 
+          data-url="{{item.url}}">
+      <image class="service-icon" src="{{item.icon}}" mode="aspectFit"></image>
+      <text class="service-name">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 热门轮胎 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">热门轮胎</text>
+      <view class="more" bindtap="navigateTo" data-url="/pages/tire/tire">
+        <text>更多</text>
+        <text class="arrow">></text>
+      </view>
+    </view>
+    <scroll-view class="tire-list" scroll-x>
+      <view class="tire-item" 
+            wx:for="{{hotTires}}" 
+            wx:key="id"
+            bindtap="navigateTo"
+            data-url="/pages/tire/detail?id={{item.id}}">
+        <image class="tire-image" src="{{item.imageUrl}}" mode="aspectFit"></image>
+        <text class="tire-name">{{item.name}}</text>
+        <text class="tire-price">¥{{item.price}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 预约按钮 -->
+  <view class="appointment-btn" bindtap="makeAppointment">
+    <text>立即预约</text>
+  </view>
+</view> 

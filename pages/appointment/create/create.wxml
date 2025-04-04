@@ -1,0 +1,64 @@
+<view class="container">
+  <view class="form-group">
+    <view class="form-item">
+      <text class="label">预约日期</text>
+      <picker mode="date" value="{{date}}" start="{{date}}" bindchange="bindDateChange">
+        <view class="picker">{{date}}</view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="label">预约时间</text>
+      <picker mode="time" value="{{time}}" start="09:00" end="18:00" bindchange="bindTimeChange">
+        <view class="picker">{{time}}</view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="label">服务类型</text>
+      <picker mode="selector" range="{{serviceTypes}}" value="{{serviceTypes.indexOf(selectedService)}}" bindchange="bindServiceChange">
+        <view class="picker">{{selectedService || '请选择服务类型'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="label">车辆信息</text>
+      <input class="input" 
+             placeholder="请输入车型/车牌号" 
+             value="{{carInfo}}"
+             data-field="carInfo"
+             bindinput="inputChange" />
+    </view>
+
+    <view class="form-item">
+      <text class="label">问题描述</text>
+      <textarea class="textarea" 
+                placeholder="请描述您的具体需求（选填）" 
+                value="{{description}}"
+                data-field="description"
+                bindinput="inputChange" />
+    </view>
+
+    <view class="form-item">
+      <text class="label">联系人</text>
+      <input class="input" 
+             placeholder="请输入联系人姓名" 
+             value="{{contact}}"
+             data-field="contact"
+             bindinput="inputChange" />
+    </view>
+
+    <view class="form-item">
+      <text class="label">手机号码</text>
+      <input class="input" 
+             type="number"
+             maxlength="11"
+             placeholder="请输入手机号码" 
+             value="{{phone}}"
+             data-field="phone"
+             bindinput="inputChange" />
+    </view>
+  </view>
+
+  <view class="submit-btn" bindtap="submitAppointment">提交预约</view>
+</view> 

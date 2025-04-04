@@ -1,0 +1,27 @@
+<view class="container">
+  <view class="header">
+    <image class="logo" src="/images/logo.png" mode="aspectFit"></image>
+    <text class="title">汽车保养维修</text>
+  </view>
+  
+  <view class="content">
+    <text class="desc">申请获取以下权限</text>
+    <text class="desc">获得你的公开信息(昵称、头像等)</text>
+  </view>
+
+  <view class="footer">
+    <button 
+      wx:if="{{canIUseGetUserProfile}}"
+      class="auth-btn" 
+      type="primary" 
+      bindtap="getUserProfile"
+    >微信登录</button>
+    <button 
+      wx:else
+      class="auth-btn" 
+      type="primary" 
+      open-type="getUserInfo" 
+      bindgetuserinfo="getUserProfile"
+    >微信登录</button>
+  </view>
+</view> 

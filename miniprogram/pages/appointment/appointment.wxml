@@ -1,0 +1,90 @@
+<view class="container">
+  <!-- 服务选择 -->
+  <view class="section">
+    <view class="section-title">选择服务</view>
+    <view class="service-list">
+      <view class="service-item {{selectedService?.id === service.id ? 'active' : ''}}"
+            wx:for="{{services}}"
+            wx:key="id"
+            wx:for-item="service"
+            bindtap="selectService"
+            data-service="{{service}}">
+        <image class="service-icon" src="{{service.icon}}" mode="aspectFit"></image>
+        <text class="service-name">{{service.name}}</text>
+        <text class="service-price">¥{{service.price}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 预约时间 -->
+  <view class="section">
+    <view class="section-title">预约时间</view>
+    <view class="form-item">
+      <picker mode="date" 
+              value="{{date}}" 
+              start="{{formatDate(minDate)}}" 
+              end="{{formatDate(maxDate)}}"
+              bindchange="bindDateChange">
+        <view class="picker">
+          <text class="label">日期</text>
+          <text class="value">{{date || '请选择日期'}}</text>
+          <text class="arrow">></text>
+        </view>
+      </picker>
+    </view>
+    <view class="form-item">
+      <picker mode="time" 
+              value="{{time}}" 
+              start="09:00" 
+              end="18:00"
+              bindchange="bindTimeChange">
+        <view class="picker">
+          <text class="label">时间</text>
+          <text class="value">{{time || '请选择时间'}}</text>
+          <text class="arrow">></text>
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 联系信息 -->
+  <view class="section">
+    <view class="section-title">联系信息</view>
+    <view class="form-item">
+      <text class="label">姓名</text>
+      <input class="input" 
+             type="text"
+             placeholder="请输入姓名"
+             value="{{name}}"
+             bindinput="inputName"/>
+    </view>
+    <view class="form-item">
+      <text class="label">手机号</text>
+      <input class="input" 
+             type="number"
+             placeholder="请输入手机号"
+             value="{{phone}}"
+             bindinput="inputPhone"/>
+    </view>
+    <view class="form-item">
+      <text class="label">车牌号</text>
+      <input class="input" 
+             type="text"
+             placeholder="请输入车牌号"
+             value="{{carNumber}}"
+             bindinput="inputCarNumber"/>
+    </view>
+    <view class="form-item">
+      <text class="label">备注</text>
+      <textarea class="textarea" 
+                placeholder="请输入备注信息（选填）"
+                value="{{remark}}"
+                bindinput="inputRemark"/>
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-btn" bindtap="submitAppointment">
+    <text>提交预约</text>
+  </view>
+</view> 

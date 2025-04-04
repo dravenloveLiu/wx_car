@@ -1,0 +1,119 @@
+.container {
+  padding: 0;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* 用户信息区域 */
+.user-info {
+  background-color: #e74c3c;
+  padding: 40rpx 30rpx;
+  display: flex;
+  align-items: center;
+  color: #fff;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.user-detail {
+  flex: 1;
+  margin-left: 30rpx;
+}
+
+.nickname {
+  font-size: 32rpx;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.member-level {
+  font-size: 24rpx;
+  opacity: 0.9;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+.login-btn {
+  background-color: #fff;
+  color: #e74c3c;
+  font-size: 28rpx;
+  padding: 12rpx 30rpx;
+  border-radius: 30rpx;
+  margin: 0;
+}
+
+/* 会员功能区域 */
+.member-features {
+  background-color: #fff;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20rpx;
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.feature-icon {
+  width: 80rpx;
+  height: 80rpx;
+  margin-bottom: 12rpx;
+}
+
+.feature-name {
+  font-size: 24rpx;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.feature-value {
+  font-size: 24rpx;
+  color: #e74c3c;
+}
+
+/* 我的服务区域 */
+.my-services {
+  background-color: #fff;
+  padding: 30rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 30rpx;
+}
+
+.service-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30rpx;
+}
+
+.service-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.service-icon {
+  width: 60rpx;
+  height: 60rpx;
+  margin-bottom: 12rpx;
+}
+
+.service-name {
+  font-size: 24rpx;
+  color: #666;
+} 

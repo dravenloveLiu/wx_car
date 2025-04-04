@@ -1,0 +1,69 @@
+<!--pages/service/service.wxml-->
+<view class="container">
+  <!-- 顶部标签页 -->
+  <view class="tabs">
+    <view 
+      wx:for="{{tabs}}" 
+      wx:key="index" 
+      class="tab {{activeTab === index ? 'active' : ''}}"
+      bindtap="switchTab"
+      data-index="{{index}}"
+    >
+      {{item}}
+    </view>
+  </view>
+
+  <!-- 服务列表 -->
+  <view class="service-list" wx:if="{{!loading && services.length > 0}}">
+    <view class="service-item" wx:for="{{services}}" wx:key="id" bindtap="viewDetail" data-id="{{item.id}}">
+      <view class="service-header">
+        <text class="service-type">{{item.serviceType}}</text>
+        <text class="service-time">{{formatDate(item.createTime)}}</text>
+      </view>
+      
+      <view class="service-info">
+        <view class="car-info">
+          <text class="car-model">{{item.carModel}}</text>
+          <text class="plate-number">{{item.plateNumber}}</text>
+        </view>
+        
+        <!-- 进度条 -->
+        <view class="progress-container">
+          <view class="progress-bar">
+            <view class="progress-fill" style="width: {{getProgressPercent(item.status)}}%"></view>
+          </view>
+          <view class="progress-status {{getStatusStyle(item.status)}}">
+            {{getStatusText(item.status)}}
+          </view>
+        </view>
+
+        <view class="service-details">
+          <view class="detail-item">
+            <text class="label">预计完成时间：</text>
+            <text class="value">{{formatDate(item.estimatedFinishTime)}}</text>
+          </view>
+          <view class="detail-item">
+            <text class="label">服务项目：</text>
+            <text class="value">{{item.serviceItems}}</text>
+          </view>
+          <view class="detail-item" wx:if="{{item.currentStep}}">
+            <text class="label">当前环节：</text>
+            <text class="value highlight">{{item.currentStep}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && services.length === 0}}">
+    <image class="empty-icon" src="/images/empty-service.png" mode="aspectFit"></image>
+    <text class="empty-text">暂无{{activeTab === 0 ? '进行中' : '已完成'}}的服务</text>
+  </view>
+
+  <!-- 加载中状态 -->
+  <view class="loading-state" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+</view>

@@ -1,0 +1,46 @@
+<view class="container">
+  <!-- 用户信息区域 -->
+  <view class="user-info">
+    <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+    <view class="user-detail">
+      <text class="nickname">{{userInfo.nickName || '未登录'}}</text>
+      <text class="member-level">{{memberInfo.level || '普通会员'}}</text>
+    </view>
+    <button class="login-btn" wx:if="{{!userInfo}}" bindtap="login">立即登录</button>
+  </view>
+
+  <!-- 会员功能区域 -->
+  <view class="member-features">
+    <view class="feature-item" bindtap="navigateTo" data-url="/pages/member/points/points">
+      <image class="feature-icon" src="/images/member/points.svg" mode="aspectFit"></image>
+      <text class="feature-name">我的积分</text>
+      <text class="feature-value">{{memberInfo.points || 0}}</text>
+    </view>
+    <view class="feature-item" bindtap="navigateTo" data-url="/pages/member/coupons/coupons">
+      <image class="feature-icon" src="/images/member/coupon.svg" mode="aspectFit"></image>
+      <text class="feature-name">优惠券</text>
+      <text class="feature-value">{{memberInfo.coupons || 0}}张</text>
+    </view>
+    <view class="feature-item" bindtap="navigateTo" data-url="/pages/member/wallet/wallet">
+      <image class="feature-icon" src="/images/member/wallet.svg" mode="aspectFit"></image>
+      <text class="feature-name">我的钱包</text>
+      <text class="feature-value">¥{{memberInfo.balance || '0.00'}}</text>
+    </view>
+    <view class="feature-item" bindtap="navigateTo" data-url="/pages/member/mall/mall">
+      <image class="feature-icon" src="/images/member/gift.svg" mode="aspectFit"></image>
+      <text class="feature-name">积分商城</text>
+      <text class="feature-value">兑好礼</text>
+    </view>
+  </view>
+
+  <!-- 我的服务区域 -->
+  <view class="my-services">
+    <view class="section-title">我的服务</view>
+    <view class="service-list">
+      <view class="service-item" wx:for="{{services}}" wx:key="id" bindtap="navigateTo" data-url="{{item.url}}">
+        <image class="service-icon" src="{{item.icon}}" mode="aspectFit"></image>
+        <text class="service-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+</view> 
