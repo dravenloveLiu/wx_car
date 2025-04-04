@@ -21,6 +21,14 @@
     </swiper-item>
   </swiper>
 
+  <!-- 搜索框 -->
+  <view class="search-container">
+    <view class="search-box" bindtap="goToSearch">
+      <icon type="search" size="16" color="#999"></icon>
+      <text class="search-placeholder">搜索服务、轮胎、配件</text>
+    </view>
+  </view>
+
   <!-- 服务分类 -->
   <view class="services">
     <view class="service-item" 
@@ -32,6 +40,58 @@
         <text class="icon">{{item.icon}}</text>
       </view>
       <text class="service-name">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 我的爱车 -->
+  <view class="section my-car">
+    <view class="section-header">
+      <view class="section-title">我的爱车</view>
+      <view class="section-more" bindtap="navigateTo" data-url="/pages/car/car">管理爱车</view>
+    </view>
+    <view class="car-info" wx:if="{{userCar}}">
+      <view class="car-avatar">
+        <view class="car-image">
+          <view class="placeholder">
+            <text>{{userCar.brand[0]}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="car-detail">
+        <view class="car-name">{{userCar.brand}} {{userCar.model}}</view>
+        <view class="car-plate">{{userCar.plateNumber}}</view>
+        <view class="car-meta">
+          <text class="car-year">{{userCar.year}}年</text>
+          <text class="car-mileage">{{userCar.mileage}}公里</text>
+        </view>
+      </view>
+      <view class="car-action" bindtap="navigateTo" data-url="/pages/car/maintenance">
+        <text>保养记录</text>
+      </view>
+    </view>
+    <view class="add-car" bindtap="navigateTo" data-url="/pages/car/add" wx:else>
+      <view class="add-icon">+</view>
+      <view class="add-text">添加爱车信息</view>
+      <view class="add-desc">添加后可获得专属保养方案</view>
+    </view>
+  </view>
+
+  <!-- 门店位置 -->
+  <view class="section store-location">
+    <view class="section-header">
+      <view class="section-title">门店位置</view>
+      <view class="section-more" bindtap="navigateTo" data-url="/pages/store/list">全部门店</view>
+    </view>
+    <view class="store-card" bindtap="navigateToStore">
+      <view class="store-info">
+        <view class="store-name">{{nearestStore.name || '总店'}}</view>
+        <view class="store-address">{{nearestStore.address || '北京市海淀区西三环北路25号'}}</view>
+        <view class="store-hours">营业时间: {{nearestStore.hours || '09:00-18:00'}}</view>
+        <view class="store-phone">电话: {{nearestStore.phone || '010-12345678'}}</view>
+      </view>
+      <view class="store-action">
+        <text class="navigation-text">导航</text>
+      </view>
     </view>
   </view>
 

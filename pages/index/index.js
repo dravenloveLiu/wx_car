@@ -129,13 +129,17 @@ Page({
         image: '/images/products/ac.png',
         url: '/pages/service/detail?id=3'
       }
-    ]
+    ],
+    userCar: null,
+    nearestStore: null
   },
 
   onLoad() {
     // 暂时注释掉网络请求，等后端准备好再打开
     // this.getBanners()
     // this.getHotTires()
+    this.getUserCar()
+    this.getNearestStore()
   },
 
   getBanners() {
@@ -151,6 +155,42 @@ Page({
       this.setData({
         hotTires: res.data
       })
+    })
+  },
+
+  getUserCar() {
+    // 模拟获取用户车辆数据
+    // 实际应用中，应该从后端或本地存储获取
+    const isLoggedIn = app.globalData.isLogin
+    
+    if (isLoggedIn) {
+      // 模拟已登录用户的车辆数据
+      this.setData({
+        userCar: {
+          id: 1,
+          brand: '大众',
+          model: '帕萨特',
+          plateNumber: '京A12345',
+          year: '2020',
+          mileage: '25000'
+        }
+      })
+    }
+  },
+
+  getNearestStore() {
+    // 模拟获取最近门店数据
+    // 实际应用中，应该根据用户位置从后端获取
+    this.setData({
+      nearestStore: {
+        id: 1,
+        name: '北京海淀总店',
+        address: '北京市海淀区西三环北路25号',
+        latitude: 39.98123,
+        longitude: 116.32123,
+        hours: '09:00-18:00',
+        phone: '010-12345678'
+      }
     })
   },
 
@@ -202,6 +242,27 @@ Page({
     }
     wx.navigateTo({
       url: '/pages/appointment/create/create'
+    })
+  },
+
+  navigateToStore() {
+    const store = this.data.nearestStore
+    // 使用微信内置地图导航
+    if (store) {
+      wx.openLocation({
+        latitude: store.latitude,
+        longitude: store.longitude,
+        name: store.name,
+        address: store.address,
+        scale: 18
+      })
+    }
+  },
+
+  // 跳转到搜索页面
+  goToSearch() {
+    wx.navigateTo({
+      url: '/pages/search/search'
     })
   }
 }) 

@@ -1,0 +1,40 @@
+<view class="container">
+  <view class="header">
+    <view class="title">门店列表</view>
+    <view class="subtitle">快速查找附近门店</view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 门店列表 -->
+  <view wx:else class="store-list">
+    <view class="store-item" wx:for="{{stores}}" wx:key="id">
+      <view class="store-info">
+        <view class="store-name">{{item.name}}</view>
+        <view class="store-address">{{item.address}}</view>
+        <view class="store-contact">
+          <text class="store-hours">营业时间: {{item.hours}}</text>
+          <text class="store-distance">距离: {{item.distance}}km</text>
+        </view>
+      </view>
+      <view class="store-actions">
+        <view class="action-btn phone" bindtap="callStore" data-phone="{{item.phone}}">
+          <view class="action-icon">📞</view>
+          <view class="action-text">电话</view>
+        </view>
+        <view class="action-btn nav" bindtap="navigateToStore" data-index="{{index}}">
+          <view class="action-icon">🧭</view>
+          <view class="action-text">导航</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="footer-tips">
+    <text>如需帮助，请致电客服热线: 400-123-4567</text>
+  </view>
+</view> 

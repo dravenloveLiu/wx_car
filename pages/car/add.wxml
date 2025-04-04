@@ -1,0 +1,64 @@
+<view class="container">
+  <view class="header">
+    <view class="title">添加爱车信息</view>
+    <view class="subtitle">填写爱车信息，获取专属保养提醒</view>
+  </view>
+
+  <view class="form-container">
+    <view class="form-item">
+      <view class="form-label required">品牌</view>
+      <picker bindchange="bindBrandChange" value="{{carForm.brand}}" range="{{brands}}">
+        <view class="picker {{carForm.brand ? '' : 'placeholder'}}">
+          {{carForm.brand || '请选择品牌'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label required">车型</view>
+      <input class="form-input" placeholder="请输入车型" value="{{carForm.model}}" data-field="model" bindinput="inputChange"></input>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label required">车牌号码</view>
+      <input class="form-input" placeholder="请输入车牌号码" value="{{carForm.plateNumber}}" data-field="plateNumber" bindinput="inputChange"></input>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">生产年份</view>
+      <input class="form-input" placeholder="请输入生产年份" type="number" value="{{carForm.year}}" data-field="year" bindinput="inputChange"></input>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">行驶里程(km)</view>
+      <input class="form-input" placeholder="请输入行驶里程" type="number" value="{{carForm.mileage}}" data-field="mileage" bindinput="inputChange"></input>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">发动机类型</view>
+      <picker bindchange="bindEngineTypeChange" value="{{carForm.engineType}}" range="{{engineTypes}}">
+        <view class="picker {{carForm.engineType ? '' : 'placeholder'}}">
+          {{carForm.engineType || '请选择发动机类型'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">购买日期</view>
+      <picker mode="date" value="{{carForm.buyDate}}" start="2000-01-01" end="2099-12-31" bindchange="bindDateChange">
+        <view class="picker {{carForm.buyDate ? '' : 'placeholder'}}">
+          {{carForm.buyDate || '请选择购买日期'}}
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <view class="submit-btn" bindtap="submitForm">保存</view>
+
+  <view class="tips">
+    <view class="tips-title">为什么要添加爱车信息？</view>
+    <view class="tips-item">1. 获取爱车专属保养提醒</view>
+    <view class="tips-item">2. 快速预约养车和维修服务</view>
+    <view class="tips-item">3. 记录爱车保养维修历史</view>
+  </view>
+</view> 

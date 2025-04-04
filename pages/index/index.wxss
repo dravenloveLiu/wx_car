@@ -228,4 +228,183 @@
   font-size: 32rpx;
   font-weight: bold;
   color: #e74c3c;
+}
+
+/* 我的爱车 */
+.my-car {
+  margin-bottom: 20rpx;
+}
+
+.car-info {
+  display: flex;
+  background-color: #fff;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  align-items: center;
+}
+
+.car-avatar {
+  margin-right: 20rpx;
+}
+
+.car-image {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.car-image .placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: #1296db;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.car-image .placeholder text {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.car-detail {
+  flex: 1;
+}
+
+.car-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 6rpx;
+}
+
+.car-plate {
+  font-size: 30rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
+.car-meta {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.car-year {
+  margin-right: 16rpx;
+}
+
+.car-action {
+  padding: 12rpx 24rpx;
+  background-color: #f5f5f5;
+  border-radius: 30rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.add-car {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border-radius: 12rpx;
+  padding: 40rpx 0;
+}
+
+.add-icon {
+  font-size: 60rpx;
+  width: 100rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  text-align: center;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  color: #1296db;
+  margin-bottom: 20rpx;
+}
+
+.add-text {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.add-desc {
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* 门店位置 */
+.store-location {
+  margin-bottom: 20rpx;
+}
+
+.store-card {
+  display: flex;
+  background-color: #fff;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  align-items: center;
+}
+
+.store-info {
+  flex: 1;
+}
+
+.store-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.store-address {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
+.store-hours, .store-phone {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 6rpx;
+}
+
+.store-action {
+  padding: 12rpx 24rpx;
+  background-color: #1296db;
+  border-radius: 30rpx;
+  color: #fff;
+}
+
+.navigation-text {
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+/* 搜索框样式 */
+.search-container {
+  padding: 20rpx 0;
+}
+
+.search-box {
+  height: 70rpx;
+  background-color: #fff;
+  border-radius: 35rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 30rpx;
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.05);
+}
+
+.search-box icon {
+  margin-right: 10rpx;
+}
+
+.search-placeholder {
+  color: #999;
+  font-size: 28rpx;
 } 

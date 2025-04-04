@@ -1,0 +1,94 @@
+<view class="container">
+  <!-- 搜索框 -->
+  <view class="search-header">
+    <view class="search-input-wrap">
+      <icon type="search" size="16" color="#999"></icon>
+      <input class="search-input" 
+             placeholder="搜索服务、轮胎、配件" 
+             value="{{keyword}}"
+             bindinput="onInput"
+             bindconfirm="doSearch"
+             confirm-type="search"
+             focus="true"
+             />
+      <icon wx:if="{{keyword}}" 
+            bindtap="clearInput" 
+            type="clear" 
+            size="16" 
+            color="#999"></icon>
+    </view>
+    <view class="search-btn" bindtap="doSearch">搜索</view>
+  </view>
+
+  <!-- 搜索结果 -->
+  <block wx:if="{{keyword && results.length > 0}}">
+    <view class="search-result">
+      <view class="result-list">
+        <view class="result-item" 
+              wx:for="{{results}}" 
+              wx:key="id"
+              bindtap="tapResult"
+              data-item="{{item}}">
+          <view class="result-icon {{item.type}}">
+            <text>{{item.type === 'service' ? '服' : item.type === 'tire' ? '轮' : '件'}}</text>
+          </view>
+          <view class="result-info">
+            <view class="result-name">{{item.name}}</view>
+            <view class="result-desc">{{item.desc || item.spec}}</view>
+          </view>
+          <view class="result-price">¥{{item.price}}</view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 无搜索结果 -->
+  <view class="no-result" wx:elif="{{keyword && !searching && results.length === 0}}">
+    <view class="no-result-icon">🔍</view>
+    <view class="no-result-text">未找到相关结果</view>
+  </view>
+
+  <!-- 搜索历史和热门搜索 -->
+  <block wx:elif="{{!keyword}}">
+    <!-- 搜索历史 -->
+    <view class="search-section" wx:if="{{historySearches.length > 0}}">
+      <view class="section-header">
+        <view class="section-title">搜索历史</view>
+        <view class="clear-history" bindtap="clearHistory">清空</view>
+      </view>
+      <view class="tag-list">
+        <view class="tag-item" 
+              wx:for="{{historySearches}}" 
+              wx:key="*this"
+              bindtap="tapSearch"
+              data-keyword="{{item}}">
+          {{item}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 热门搜索 -->
+    <view class="search-section">
+      <view class="section-header">
+        <view class="section-title">热门搜索</view>
+      </view>
+      <view class="tag-list">
+        <view class="tag-item" 
+              wx:for="{{hotSearches}}" 
+              wx:key="*this"
+              bindtap="tapSearch"
+              data-keyword="{{item}}">
+          {{item}}
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 搜索中Loading -->
+  <view class="searching-container" wx:if="{{searching}}">
+    <view class="searching">
+      <view class="searching-icon"></view>
+      <view class="searching-text">搜索中...</view>
+    </view>
+  </view>
+</view> 
