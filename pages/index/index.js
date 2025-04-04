@@ -155,17 +155,33 @@ Page({
   },
 
   navigateTo(e) {
-    const url = e.currentTarget.dataset.url
-    if (url) {
-      if (url.includes('/appointment/') && !app.globalData.isLogin) {
-        wx.navigateTo({
-          url: '/pages/auth/auth'
-        })
-        return
-      }
+    const url = e.currentTarget.dataset.url;
+    console.log('Navigating to:', url);
+    
+    // 检查URL是否为轮胎详情页或服务详情页
+    if (url && (url.startsWith('/pages/tire/detail') || url.startsWith('/pages/service/detail'))) {
       wx.navigateTo({
         url: url
-      })
+      });
+      return;
+    }
+    
+    // 检查URL是否为预约相关页面
+    if (url && url.includes('/appointment/')) {
+      // 未登录时跳转到登录页
+      if (!app.globalData.isLoggedIn) {
+        wx.navigateTo({
+          url: '/pages/login/login'
+        });
+        return;
+      }
+    }
+    
+    // 其他页面正常跳转
+    if (url) {
+      wx.navigateTo({
+        url: url
+      });
     }
   },
 

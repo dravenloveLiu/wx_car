@@ -12,7 +12,9 @@
     "pages/member/points/points",
     "pages/member/coupons/coupons",
     "pages/member/wallet/wallet",
-    "pages/member/mall/mall"
+    "pages/member/mall/mall",
+    "pages/tire/detail",
+    "pages/service/detail"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -1,0 +1,64 @@
+<view class="container">
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+  
+  <block wx:else>
+    <!-- 服务图片 -->
+    <view class="service-image">
+      <view class="placeholder">
+        <text class="service-icon">{{service.name[0]}}</text>
+      </view>
+    </view>
+    
+    <!-- 基本信息 -->
+    <view class="info-section">
+      <view class="service-name">{{service.name}}</view>
+      <view class="service-desc">{{service.desc}}</view>
+      <view class="price-row">
+        <view>
+          <text class="price">¥{{service.price}}</text>
+          <text class="old-price">¥{{service.oldPrice}}</text>
+        </view>
+        <view class="rating">
+          <text class="rating-text">{{service.rating}}</text>
+          <text class="reviews">({{service.reviews}}条评价)</text>
+        </view>
+      </view>
+      <view class="sold">已售: {{service.soldCount}}件</view>
+    </view>
+    
+    <!-- 规格信息 -->
+    <view class="spec-section">
+      <view class="section-title">规格参数</view>
+      <view class="spec-list">
+        <view class="spec-item" wx:for="{{service.specifications}}" wx:key="name">
+          <text class="spec-label">{{item.name}}</text>
+          <text class="spec-value">{{item.value}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 产品描述 -->
+    <view class="desc-section">
+      <view class="section-title">服务描述</view>
+      <view class="description">{{service.description}}</view>
+    </view>
+    
+    <!-- 产品特点 -->
+    <view class="features-section">
+      <view class="section-title">服务特点</view>
+      <view class="feature-list">
+        <view class="feature-item" wx:for="{{service.features}}" wx:key="index">
+          <text class="feature-dot">•</text>
+          <text class="feature-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </block>
+  
+  <!-- 底部按钮 -->
+  <view class="bottom-actions">
+    <view class="appointment-btn" bindtap="makeAppointment">立即预约</view>
+  </view>
+</view> 

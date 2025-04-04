@@ -1,0 +1,74 @@
+<view class="container">
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+  
+  <block wx:else>
+    <!-- 轮胎图片 -->
+    <view class="tire-image">
+      <view class="placeholder" style="background-color: #f8f8f8">
+        <text class="brand-name">{{tire.brand}}</text>
+      </view>
+    </view>
+    
+    <!-- 基本信息 -->
+    <view class="info-section">
+      <view class="tire-name">{{tire.name}}</view>
+      <view class="price-row">
+        <text class="price">¥{{tire.price}}</text>
+        <view class="rating">
+          <text class="rating-text">{{tire.rating}}</text>
+          <text class="reviews">({{tire.reviews}}条评价)</text>
+        </view>
+      </view>
+      <view class="stock">库存: {{tire.stock}}件</view>
+    </view>
+    
+    <!-- 规格信息 -->
+    <view class="spec-section">
+      <view class="section-title">规格参数</view>
+      <view class="spec-list">
+        <view class="spec-item">
+          <text class="spec-label">品牌</text>
+          <text class="spec-value">{{tire.brand}}</text>
+        </view>
+        <view class="spec-item">
+          <text class="spec-label">型号</text>
+          <text class="spec-value">{{tire.model}}</text>
+        </view>
+        <view class="spec-item">
+          <text class="spec-label">尺寸</text>
+          <text class="spec-value">{{tire.size}}</text>
+        </view>
+        <view class="spec-item">
+          <text class="spec-label">速度等级</text>
+          <text class="spec-value">{{tire.speedRating}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 产品描述 -->
+    <view class="desc-section">
+      <view class="section-title">产品描述</view>
+      <view class="description">{{tire.description}}</view>
+    </view>
+    
+    <!-- 产品特点 -->
+    <view class="features-section">
+      <view class="section-title">产品特点</view>
+      <view class="feature-list">
+        <view class="feature-item" wx:for="{{tire.features}}" wx:key="index">
+          <text class="feature-dot">•</text>
+          <text class="feature-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </block>
+  
+  <!-- 底部按钮 -->
+  <view class="bottom-actions">
+    <view class="cart-btn" bindtap="addToCart">加入购物车</view>
+    <view class="buy-btn" bindtap="buy">立即购买</view>
+    <view class="appointment-btn" bindtap="makeAppointment">预约安装</view>
+  </view>
+</view> 

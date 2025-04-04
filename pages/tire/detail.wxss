@@ -1,0 +1,193 @@
+.container {
+  padding: 20rpx;
+  padding-bottom: 120rpx;
+  background-color: #f5f5f5;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #999;
+}
+
+/* 轮胎图片样式 */
+.tire-image {
+  width: 100%;
+  height: 400rpx;
+  border-radius: 12rpx;
+  margin-bottom: 20rpx;
+  overflow: hidden;
+}
+
+.placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f8f8;
+}
+
+.brand-name {
+  font-size: 60rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 基本信息样式 */
+.info-section {
+  background-color: #fff;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.tire-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.price {
+  font-size: 38rpx;
+  font-weight: bold;
+  color: #e74c3c;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+}
+
+.rating-text {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #f39c12;
+  margin-right: 4rpx;
+}
+
+.reviews {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.stock {
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* 规格信息样式 */
+.spec-section, .desc-section, .features-section {
+  background-color: #fff;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+  padding-left: 10rpx;
+  border-left: 8rpx solid #1296db;
+}
+
+.spec-list {
+  padding: 0 10rpx;
+}
+
+.spec-item {
+  display: flex;
+  margin-bottom: 12rpx;
+  font-size: 28rpx;
+}
+
+.spec-label {
+  width: 160rpx;
+  color: #999;
+}
+
+.spec-value {
+  flex: 1;
+  color: #333;
+}
+
+/* 产品描述样式 */
+.description {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+  padding: 0 10rpx;
+}
+
+/* 产品特点样式 */
+.feature-list {
+  padding: 0 10rpx;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 12rpx;
+}
+
+.feature-dot {
+  margin-right: 10rpx;
+  color: #1296db;
+  font-weight: bold;
+}
+
+.feature-text {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* 底部按钮样式 */
+.bottom-actions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  height: 100rpx;
+  background-color: #fff;
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.cart-btn, .buy-btn, .appointment-btn {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 30rpx;
+  font-weight: bold;
+}
+
+.cart-btn {
+  background-color: #fff;
+  color: #1296db;
+  border-top: 1rpx solid #eee;
+}
+
+.buy-btn {
+  background-color: #f39c12;
+  color: #fff;
+}
+
+.appointment-btn {
+  background-color: #e74c3c;
+  color: #fff;
+} 
