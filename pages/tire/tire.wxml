@@ -1,2 +1,36 @@
 <!--pages/tire/tire.wxml-->
-<text>pages/tire/tire.wxml</text>
+<view class="container">
+  <view class="header">
+    <view class="title">轮胎选购</view>
+    <view class="subtitle">多款品牌轮胎，质优价廉</view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 轮胎列表 -->
+  <view wx:else class="tire-list">
+    <view class="tire-item" wx:for="{{tires}}" wx:key="id" bindtap="navigateToDetail" data-id="{{item.id}}">
+      <view class="tire-image">
+        <view class="placeholder">
+          <text>{{item.brand}}</text>
+        </view>
+      </view>
+      <view class="tire-info">
+        <view class="tire-name">{{item.name}}</view>
+        <view class="tire-spec">{{item.spec}}</view>
+        <view class="price-row">
+          <text class="price">¥{{item.price}}</text>
+          <text class="old-price">¥{{item.oldPrice}}</text>
+        </view>
+        <view class="rating-row">
+          <text class="rating">{{item.rating}}分</text>
+          <text class="reviews">{{item.reviews}}评价</text>
+          <text class="sold">已售{{item.sold}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -39,49 +39,49 @@ Page({
         name: '做保养',
         iconColor: '#2ecc71',
         icon: '🔧',
-        url: '/pages/service/service'
+        url: '/pages/service/detail?id=4'
       },
       {
         id: 3,
         name: '换蓄电池',
         iconColor: '#e74c3c',
         icon: '🔋',
-        url: '/pages/service/service'
+        url: '/pages/service/detail?id=5'
       },
       {
         id: 4,
         name: '汽车打蜡',
         iconColor: '#f39c12',
         icon: '✨',
-        url: '/pages/service/service'
+        url: '/pages/service/detail?id=6'
       },
       {
         id: 5,
         name: '爱车升级',
         iconColor: '#9b59b6',
         icon: '⬆️',
-        url: '/pages/service/service'
+        url: '/pages/service/detail?id=7'
       },
       {
         id: 6,
         name: '喷漆',
         iconColor: '#3498db',
         icon: '🎨',
-        url: '/pages/service/service'
+        url: '/pages/service/detail?id=8'
       },
       {
         id: 7,
         name: '配件维修',
         iconColor: '#27ae60',
         icon: '🔩',
-        url: '/pages/service/service'
+        url: '/pages/service/detail?id=9'
       },
       {
         id: 8,
         name: '隔热窗膜',
         iconColor: '#e67e22',
         icon: '🪟',
-        url: '/pages/service/service'
+        url: '/pages/service/detail?id=10'
       }
     ],
     hotTires: [
