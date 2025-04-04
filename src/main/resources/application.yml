@@ -3,25 +3,68 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/car_service?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/car_service?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
-    password: root
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
+    schema:
+      - classpath:db/schema.sql
+    data:
+      - classpath:db/data.sql
+    # 数据库初始化配置
+    sql-script-encoding: utf-8
+    # 只在嵌入式数据库时初始化：never, always, embedded
+    # 如果是生产环境，请设置为never
+    initialize: always
+
+  redis:
+    host: localhost
+    port: 6379
   
   # 文件上传配置
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 100MB
+  
+  # 解决SpringFox与Spring Boot 2.7.x的兼容性问题
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+# Knife4j配置
+knife4j:
+  # 开启增强配置
+  enable: true
+  # 开启生产环境屏蔽
+  production: false
 
 mybatis-plus:
-  mapper-locations: classpath:mapper/*.xml
-  configuration:
-    map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:/mapper/**/*.xml
   global-config:
     db-config:
+      # 主键类型：AUTO(0), NONE(1), INPUT(2), ID_WORKER(3), UUID(4), ID_WORKER_STR(5)
       id-type: auto
+      # 逻辑删除字段名
       logic-delete-field: deleted
+      # 逻辑删除值
       logic-delete-value: 1
-      logic-not-delete-value: 0 
+      # 逻辑未删除值
+      logic-not-delete-value: 0
+      # 表前缀
+      table-prefix: t_
+  configuration:
+    # 下划线转驼峰
+    map-underscore-to-camel-case: true
+    # 缓存开启
+    cache-enabled: true
+    # 日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 日志配置
+logging:
+  level:
+    com.carservice: debug
+    org.springframework: info
+    com.baomidou.mybatisplus: debug 

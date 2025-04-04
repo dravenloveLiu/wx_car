@@ -9,12 +9,15 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * Swagger配置类
+ */
 @Configuration
-@EnableSwagger2WebMvc
+@EnableSwagger2
 public class SwaggerConfig {
-
+    
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -24,13 +27,13 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build();
     }
-
+    
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("汽车服务小程序API文档")
                 .description("汽车服务小程序后端接口文档")
-                .contact(new Contact("CarService", "http://www.carservice.com", "admin@carservice.com"))
-                .version("1.0")
+                .contact(new Contact("开发团队", "http://www.carservice.com", "admin@carservice.com"))
+                .version("1.0.0")
                 .build();
     }
 } 

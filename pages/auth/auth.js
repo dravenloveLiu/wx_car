@@ -1,5 +1,6 @@
 // pages/auth/auth.js
 const app = getApp()
+const request = require('../../utils/request.js')
 
 Page({
 
@@ -9,13 +10,17 @@ Page({
   data: {
     userInfo: null,
     hasUserInfo: false,
-    canIUseGetUserProfile: false,
+    canIUseGetUserProfile: wx.canIUse('getUserProfile'),
     formData: {
       phone: '',
       name: '',
+      code: '',  // 验证码
+      isVerifying: false,  // 是否正在验证手机号
       carInfo: ''
     },
-    showInfoForm: false
+    countdown: 0,  // 验证码倒计时
+    showInfoForm: false,
+    logoLoadFailed: false
   },
 
   /**
@@ -27,6 +32,9 @@ Page({
         canIUseGetUserProfile: true
       })
     }
+
+    // 获取上一个页面传来的redirectUrl
+    this.redirectUrl = options.redirectUrl || '/pages/index/index'
   },
 
   /**
@@ -88,8 +96,6 @@ Page({
           hasUserInfo: true,
           showInfoForm: true
         })
-        // 保存微信用户基本信息
-        app.globalData.userInfo = res.userInfo
       },
       fail: (err) => {
         wx.showToast({
@@ -113,9 +119,59 @@ Page({
     return /^1[3-9]\d{9}$/.test(phone)
   },
 
+  // 获取验证码
+  getVerificationCode() {
+    const { phone } = this.data.formData
+    
+    if (!this.validatePhone(phone)) {
+      wx.showToast({
+        title: '请输入正确的手机号',
+        icon: 'none'
+      })
+      return
+    }
+
+    // 开始倒计时
+    this.setData({
+      countdown: 60
+    })
+
+    const timer = setInterval(() => {
+      this.setData({
+        countdown: this.data.countdown - 1
+      })
+
+      if (this.data.countdown <= 0) {
+        clearInterval(timer)
+      }
+    }, 1000)
+
+    // 调用发送验证码接口
+    request.post('/api/auth/send-code', {
+      phone: phone
+    }, true, true).then(res => {
+      wx.showToast({
+        title: '验证码已发送',
+        icon: 'success'
+      })
+    }).catch(err => {
+      console.error('验证码发送失败:', err);
+      // 验证码发送失败，重置倒计时
+      clearInterval(timer)
+      this.setData({
+        countdown: 0
+      })
+      
+      wx.showToast({
+        title: err.message || '验证码发送失败',
+        icon: 'none'
+      })
+    })
+  },
+
   // 提交用户信息
-  async submitUserInfo() {
-    const { phone, name, carInfo } = this.data.formData
+  submitUserInfo() {
+    const { phone, name, code, carInfo } = this.data.formData
 
     if (!name) {
       wx.showToast({
@@ -133,77 +189,94 @@ Page({
       return
     }
 
-    if (!carInfo) {
+    if (!code || code.length !== 6) {
       wx.showToast({
-        title: '请输入车辆信息',
+        title: '请输入正确的验证码',
         icon: 'none'
       })
       return
     }
 
-    try {
-      wx.showLoading({
-        title: '正在登录...'
-      })
+    // 获取登录code
+    wx.login({
+      success: (loginRes) => {
+        if (loginRes.code) {
+          // 调用登录接口
+          request.post('/api/auth/login', {
+            code: loginRes.code,
+            phone: phone,
+            verificationCode: code,
+            nickname: this.data.userInfo.nickName,
+            avatarUrl: this.data.userInfo.avatarUrl,
+            gender: this.data.userInfo.gender,
+            name: name,
+            carInfo: carInfo
+          }).then(res => {
+            // 登录成功
+            if (res.data && res.data.token) {
+              // 设置登录状态
+              app.setLoginState(res.data.token, {
+                ...this.data.userInfo,
+                phone: phone,
+                name: name
+              })
+              
+              wx.showToast({
+                title: '登录成功',
+                icon: 'success'
+              })
 
-      // 获取登录code
-      const { code } = await wx.login()
-      
-      // 调用后端登录接口
-      const result = await wx.cloud.callFunction({
-        name: 'login',
-        data: {
-          code,
-          userInfo: {
-            ...this.data.userInfo,
-            phone,
-            name,
-            carInfo
-          }
-        }
-      })
-
-      wx.hideLoading()
-
-      if (result.result && result.result.token) {
-        // 保存登录状态
-        wx.setStorageSync('token', result.result.token)
-        app.globalData.token = result.result.token
-        app.globalData.isLogin = true
-        
-        // 保存用户完整信息
-        app.globalData.userInfo = {
-          ...this.data.userInfo,
-          phone,
-          name,
-          carInfo
-        }
-
-        wx.showToast({
-          title: '登录成功',
-          icon: 'success'
-        })
-
-        // 延迟返回，确保提示显示
-        setTimeout(() => {
-          const pages = getCurrentPages()
-          if (pages.length > 1) {
-            wx.navigateBack()
-          } else {
-            wx.switchTab({
-              url: '/pages/index/index'
+              // 延迟返回，确保提示显示
+              setTimeout(() => {
+                if (this.redirectUrl.startsWith('/pages/')) {
+                  // 根据redirectUrl判断是Tab页面还是普通页面
+                  if (['pages/index/index', 'pages/service/service', 'pages/appointment/list/list', 'pages/member/index/index'].some(tab => this.redirectUrl.includes(tab))) {
+                    wx.switchTab({
+                      url: this.redirectUrl
+                    })
+                  } else {
+                    wx.redirectTo({
+                      url: this.redirectUrl
+                    })
+                  }
+                } else {
+                  wx.switchTab({
+                    url: '/pages/index/index'
+                  })
+                }
+              }, 1500)
+            }
+          }).catch(err => {
+            console.error('登录失败:', err);
+            wx.showToast({
+              title: err.message || '登录失败，请重试',
+              icon: 'none'
             })
-          }
-        }, 1500)
-      } else {
-        throw new Error('登录失败')
+          })
+        } else {
+          wx.showToast({
+            title: '获取用户登录态失败',
+            icon: 'none'
+          })
+        }
       }
-    } catch (error) {
-      wx.hideLoading()
-      wx.showToast({
-        title: '登录失败，请重试',
-        icon: 'none'
-      })
-    }
+    })
+  },
+  
+  /**
+   * 处理图片加载错误
+   */
+  handleImageError: function(e) {
+    console.error('图片加载失败：/images/logo.png');
+    this.setData({
+      logoLoadFailed: true
+    });
+    
+    // 显示错误提示
+    wx.showToast({
+      title: '资源加载错误',
+      icon: 'none',
+      duration: 2000
+    });
   }
 })

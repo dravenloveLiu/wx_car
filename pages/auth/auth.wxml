@@ -3,8 +3,15 @@
   <view class="auth-section">
     <block wx:if="{{!hasUserInfo}}">
       <view class="header">
-        <image class="logo" src="/images/logo.png" mode="aspectFit"></image>
-        <text class="title">汽车保养维修</text>
+        <block wx:if="{{logoLoadFailed}}">
+          <view class="logo-placeholder">
+            <text class="logo-text">汽车服务</text>
+          </view>
+        </block>
+        <block wx:else>
+          <image class="logo" src="/images/logo.png" mode="aspectFit" binderror="handleImageError"></image>
+        </block>
+        <text class="app-name">汽车保养维修</text>
         <text class="subtitle">为您的爱车提供专业服务</text>
       </view>
       <button class="auth-btn" 
@@ -41,6 +48,20 @@
                    bindinput="inputChange" />
           </view>
 
+          <view class="form-item verification-code">
+            <view class="form-label">验证码</view>
+            <input class="form-input code-input" 
+                   placeholder="请输入验证码" 
+                   value="{{formData.code}}"
+                   type="number"
+                   maxlength="6"
+                   data-field="code"
+                   bindinput="inputChange" />
+            <view class="get-code-btn {{countdown > 0 ? 'disabled' : ''}}" bindtap="{{countdown > 0 ? '' : 'getVerificationCode'}}">
+              {{countdown > 0 ? countdown + '秒后重发' : '获取验证码'}}
+            </view>
+          </view>
+
           <view class="form-item">
             <text class="label">车辆信息</text>
             <input class="input" 
@@ -49,6 +70,13 @@
                    data-field="carInfo"
                    bindinput="inputChange" />
           </view>
+        </view>
+
+        <view class="privacy-policy">
+          <text>登录即表示您已同意</text>
+          <text class="policy-link">《用户协议》</text>
+          <text>和</text>
+          <text class="policy-link">《隐私政策》</text>
         </view>
 
         <button class="submit-btn" bindtap="submitUserInfo">确认提交</button>

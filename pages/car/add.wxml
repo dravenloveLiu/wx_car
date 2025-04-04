@@ -7,7 +7,7 @@
   <view class="form-container">
     <view class="form-item">
       <view class="form-label required">品牌</view>
-      <picker bindchange="bindBrandChange" value="{{carForm.brand}}" range="{{brands}}">
+      <picker bindchange="bindBrandChange" value="{{carForm.brand}}" range="{{carBrands.length > 0 ? carBrands : brands}}" range-key="{{carBrands.length > 0 ? 'name' : ''}}">
         <view class="picker {{carForm.brand ? '' : 'placeholder'}}">
           {{carForm.brand || '请选择品牌'}}
         </view>
@@ -16,7 +16,16 @@
 
     <view class="form-item">
       <view class="form-label required">车型</view>
-      <input class="form-input" placeholder="请输入车型" value="{{carForm.model}}" data-field="model" bindinput="inputChange"></input>
+      <block wx:if="{{carModels.length > 0}}">
+        <picker bindchange="bindModelChange" value="{{carForm.model}}" range="{{carModels}}" range-key="name">
+          <view class="picker {{carForm.model ? '' : 'placeholder'}}">
+            {{carForm.model || '请选择车型'}}
+          </view>
+        </picker>
+      </block>
+      <block wx:else>
+        <input class="form-input" placeholder="请输入车型" value="{{carForm.model}}" data-field="model" bindinput="inputChange"></input>
+      </block>
     </view>
 
     <view class="form-item">

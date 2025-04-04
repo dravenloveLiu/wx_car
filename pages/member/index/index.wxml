@@ -45,4 +45,9 @@
   <view class="recharge-btn" bindtap="showRecharge">
     <text>在线充值</text>
   </view>
+  
+  <!-- 登出按钮 -->
+  <view class="logout-btn" bindtap="handleLogout">
+    <text>退出登录</text>
+  </view>
 </view> 

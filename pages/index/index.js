@@ -135,62 +135,158 @@ Page({
   },
 
   onLoad() {
-    // 暂时注释掉网络请求，等后端准备好再打开
-    // this.getBanners()
-    // this.getHotTires()
+    // 从后端API获取数据
+    this.getBanners()
+    this.getHotTires()
+    this.getRecommendations()
     this.getUserCar()
     this.getNearestStore()
   },
 
   getBanners() {
+    // 获取轮播图数据
     request.get('/api/banners').then(res => {
-      this.setData({
-        banners: res.data
-      })
+      // 后端返回的是ResultVO格式，data才是真正的数据数组
+      if (res.data && res.data.length > 0) {
+        this.setData({
+          banners: res.data
+        })
+      }
+    }).catch(err => {
+      console.error('获取轮播图失败', err)
+      // 请求失败时使用默认数据作为备选
+      console.log('使用默认轮播图数据')
+      // 保留默认数据，不修改this.data.banners
     })
   },
 
   getHotTires() {
+    // 获取热门轮胎
     request.get('/api/tires/hot').then(res => {
-      this.setData({
-        hotTires: res.data
-      })
+      // 后端返回的是ResultVO格式，data才是真正的数据数组
+      if (res.data && res.data.length > 0) {
+        this.setData({
+          hotTires: res.data
+        })
+      }
+    }).catch(err => {
+      console.error('获取热门轮胎失败', err)
+      // 请求失败时使用默认数据作为备选
+      console.log('使用默认热门轮胎数据')
+      // 保留默认数据，不修改this.data.hotTires
+    })
+  },
+
+  getRecommendations() {
+    // 获取推荐服务
+    request.get('/api/services/recommended').then(res => {
+      // 后端返回的是ResultVO格式，data才是真正的数据数组
+      if (res.data && res.data.length > 0) {
+        this.setData({
+          recommendations: res.data
+        })
+      }
+    }).catch(err => {
+      console.error('获取推荐服务失败', err)
+      // 请求失败时使用默认数据作为备选
+      console.log('使用默认推荐服务数据')
+      // 保留默认数据，不修改this.data.recommendations
     })
   },
 
   getUserCar() {
-    // 模拟获取用户车辆数据
-    // 实际应用中，应该从后端或本地存储获取
-    const isLoggedIn = app.globalData.isLogin
-    
-    if (isLoggedIn) {
-      // 模拟已登录用户的车辆数据
-      this.setData({
-        userCar: {
-          id: 1,
-          brand: '大众',
-          model: '帕萨特',
-          plateNumber: '京A12345',
-          year: '2020',
-          mileage: '25000'
-        }
-      })
+    // 检查用户是否登录
+    if (!app.globalData.isLogin) {
+      return
     }
+
+    // 检查是否已有车辆数据
+    if (app.globalData.userCar) {
+      this.setData({
+        userCar: app.globalData.userCar
+      })
+      return
+    }
+
+    // 从API获取车辆数据
+    request.get('/api/user/car', {}, true, false).then(res => {
+      if (res.code === 0 && res.data) {
+        this.setData({
+          userCar: res.data
+        })
+        // 同时更新全局数据
+        app.globalData.userCar = res.data
+      }
+    }).catch(err => {
+      console.error('获取用户车辆信息失败', err)
+    })
   },
 
   getNearestStore() {
-    // 模拟获取最近门店数据
-    // 实际应用中，应该根据用户位置从后端获取
-    this.setData({
-      nearestStore: {
-        id: 1,
-        name: '北京海淀总店',
-        address: '北京市海淀区西三环北路25号',
-        latitude: 39.98123,
-        longitude: 116.32123,
-        hours: '09:00-18:00',
-        phone: '010-12345678'
+    // 获取位置权限
+    wx.getSetting({
+      success: (res) => {
+        if (res.authSetting['scope.userLocation']) {
+          // 已经授权，获取位置
+          this.getLocation()
+        } else {
+          // 未授权，使用默认门店
+          this.getDefaultStore()
+        }
       }
+    })
+  },
+
+  getLocation() {
+    wx.getLocation({
+      type: 'gcj02',
+      success: (res) => {
+        const { latitude, longitude } = res
+        // 获取附近门店
+        request.get('/api/stores/nearest', {
+          latitude,
+          longitude
+        }, true, false).then(res => {
+          if (res.code === 0 && res.data) {
+            this.setData({
+              nearestStore: res.data
+            })
+          } else {
+            this.getDefaultStore()
+          }
+        }).catch(err => {
+          console.error('获取最近门店失败', err)
+          this.getDefaultStore()
+        })
+      },
+      fail: () => {
+        // 获取位置失败，使用默认门店
+        this.getDefaultStore()
+      }
+    })
+  },
+
+  getDefaultStore() {
+    request.get('/api/stores/default', {}, false, false).then(res => {
+      if (res.code === 0 && res.data) {
+        this.setData({
+          nearestStore: res.data
+        })
+      }
+    }).catch(err => {
+      console.error('获取默认门店失败', err)
+      // 使用本地默认数据
+      this.setData({
+        nearestStore: {
+          id: 1,
+          name: '总店',
+          address: '北京市海淀区西三环北路25号',
+          latitude: 39.98123,
+          longitude: 116.32123,
+          hours: '09:00-18:00',
+          phone: '010-12345678'
+        }
+      })
     })
   },
 

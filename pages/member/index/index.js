@@ -1,4 +1,5 @@
 const app = getApp()
+const request = require('../../../utils/request.js')
 
 Page({
   data: {
@@ -155,5 +156,52 @@ Page({
         icon: 'none'
       })
     }
+  },
+  
+  // 退出登录
+  handleLogout() {
+    wx.showModal({
+      title: '退出登录',
+      content: '确定要退出登录吗？',
+      success: (res) => {
+        if (res.confirm) {
+          // 调用退出登录接口
+          request.post('/api/auth/logout').then(res => {
+            // 清除本地token和用户信息
+            app.logout();
+            
+            wx.showToast({
+              title: '已退出登录',
+              icon: 'success',
+              duration: 1500
+            });
+            
+            // 跳转到首页
+            setTimeout(() => {
+              wx.switchTab({
+                url: '/pages/index/index'
+              });
+            }, 1500);
+          }).catch(err => {
+            console.error('登出失败:', err);
+            // 即使接口失败，也本地退出
+            app.logout();
+            
+            wx.showToast({
+              title: '已退出登录',
+              icon: 'success',
+              duration: 1500
+            });
+            
+            // 跳转到首页
+            setTimeout(() => {
+              wx.switchTab({
+                url: '/pages/index/index'
+              });
+            }, 1500);
+          });
+        }
+      }
+    });
   }
 }) 
