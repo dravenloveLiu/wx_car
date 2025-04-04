@@ -61,4 +61,62 @@ VALUES
 (1, 1, 1, 1, DATE_ADD(NOW(), INTERVAL 2 DAY), '尽快处理，谢谢', 0, NOW(), NOW(), '轮胎更换', '总店'),
 (1, 3, 1, 2, DATE_ADD(NOW(), INTERVAL 5 DAY), '刹车有异响', 1, NOW(), NOW(), '刹车系统检修', '朝阳分店'),
 (2, 2, 3, 1, DATE_ADD(NOW(), INTERVAL 3 DAY), '方向盘有抖动', 1, NOW(), NOW(), '四轮定位', '总店'),
-(3, 4, 4, 3, DATE_ADD(NOW(), INTERVAL 7 DAY), '常规保养', 2, NOW(), NOW(), '发动机保养', '丰台分店'); 
+(3, 4, 4, 3, DATE_ADD(NOW(), INTERVAL 7 DAY), '常规保养', 2, NOW(), NOW(), '发动机保养', '丰台分店');
+
+-- 插入汽车品牌数据
+INSERT INTO t_car_brand (id, name, letter, create_time) VALUES
+(1, '丰田', 'F', NOW()),
+(2, '本田', 'B', NOW()),
+(3, '大众', 'D', NOW()),
+(4, '福特', 'F', NOW()),
+(5, '宝马', 'B', NOW()),
+(6, '奔驰', 'B', NOW()),
+(7, '奥迪', 'A', NOW()),
+(8, '现代', 'X', NOW()),
+(9, '起亚', 'Q', NOW()),
+(10, '雪佛兰', 'X', NOW()),
+(11, '别克', 'B', NOW()),
+(12, '日产', 'R', NOW()),
+(13, '马自达', 'M', NOW()),
+(14, '雷克萨斯', 'L', NOW()),
+(15, '沃尔沃', 'W', NOW()),
+(16, '斯巴鲁', 'S', NOW()),
+(17, '三菱', 'S', NOW()),
+(18, '标致', 'B', NOW()),
+(19, '雪铁龙', 'X', NOW()),
+(20, '英菲尼迪', 'Y', NOW());
+
+-- 插入丰田车型数据
+INSERT INTO t_car_model (id, brand_id, name, create_time) VALUES
+(1, 1, '卡罗拉', NOW()),
+(2, 1, '凯美瑞', NOW()),
+(3, 1, 'RAV4', NOW()),
+(4, 1, '普拉多', NOW()),
+(5, 1, '汉兰达', NOW());
+
+-- 插入本田车型数据
+INSERT INTO t_car_model (id, brand_id, name, create_time) VALUES
+(6, 2, '思域', NOW()),
+(7, 2, '雅阁', NOW()),
+(8, 2, 'CR-V', NOW()),
+(9, 2, '飞度', NOW());
+
+-- 插入大众车型数据
+INSERT INTO t_car_model (id, brand_id, name, create_time) VALUES
+(10, 3, '高尔夫', NOW()),
+(11, 3, '帕萨特', NOW()),
+(12, 3, '途观', NOW()),
+(13, 3, '途安', NOW());
+
+-- 插入福特车型数据
+INSERT INTO t_car_model (id, brand_id, name, create_time) VALUES
+(14, 4, '福克斯', NOW()),
+(15, 4, '蒙迪欧', NOW()),
+(16, 4, '锐界', NOW());
+
+-- 插入宝马车型数据
+INSERT INTO t_car_model (id, brand_id, name, create_time) VALUES
+(17, 5, '3系', NOW()),
+(18, 5, '5系', NOW()),
+(19, 5, 'X3', NOW()),
+(20, 5, 'X5', NOW()); 

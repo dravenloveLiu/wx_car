@@ -114,4 +114,35 @@ CREATE TABLE IF NOT EXISTS t_appointment (
     store_name VARCHAR(100) COMMENT '门店名称（冗余字段）',
     INDEX idx_user_id (user_id),
     INDEX idx_status (status)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='预约表'; 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='预约表';
+
+-- 汽车品牌表
+CREATE TABLE IF NOT EXISTS `t_car_brand` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '品牌ID',
+    `name` varchar(64) NOT NULL COMMENT '品牌名称',
+    `letter` varchar(10) NOT NULL COMMENT '首字母(用于索引)',
+    `logo` varchar(255) DEFAULT NULL COMMENT '品牌LOGO',
+    `status` tinyint(4) DEFAULT 1 COMMENT '状态 0-禁用 1-启用',
+    `sort` int(11) DEFAULT 0 COMMENT '排序',
+    `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+    `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`),
+    INDEX `idx_letter` (`letter`),
+    INDEX `idx_name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='汽车品牌表';
+
+-- 汽车车型表
+CREATE TABLE IF NOT EXISTS `t_car_model` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '车型ID',
+    `brand_id` bigint(20) NOT NULL COMMENT '品牌ID',
+    `name` varchar(64) NOT NULL COMMENT '车型名称',
+    `image_url` varchar(255) DEFAULT NULL COMMENT '车型图片',
+    `year` varchar(20) DEFAULT NULL COMMENT '年份',
+    `status` tinyint(4) DEFAULT 1 COMMENT '状态 0-禁用 1-启用',
+    `sort` int(11) DEFAULT 0 COMMENT '排序',
+    `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+    `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`),
+    INDEX `idx_brand_id` (`brand_id`),
+    INDEX `idx_name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='汽车车型表'; 
