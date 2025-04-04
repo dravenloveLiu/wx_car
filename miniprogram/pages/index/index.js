@@ -7,20 +7,50 @@ Page({
     services: [
       {
         id: 1,
-        icon: '/images/tire.png',
-        name: '轮胎服务',
+        icon: '/images/service/tire.png',
+        name: '换轮胎',
         url: '/pages/tire/tire'
       },
       {
         id: 2,
-        icon: '/images/maintenance.png',
-        name: '日常保养',
+        icon: '/images/service/maintenance.png',
+        name: '做保养',
         url: '/pages/service/service'
       },
       {
         id: 3,
-        icon: '/images/repair.png',
-        name: '故障维修',
+        icon: '/images/service/battery.png',
+        name: '换蓄电池',
+        url: '/pages/service/service'
+      },
+      {
+        id: 4,
+        icon: '/images/service/waxing.png',
+        name: '汽车打蜡',
+        url: '/pages/service/service'
+      },
+      {
+        id: 5,
+        icon: '/images/service/upgrade.png',
+        name: '爱车升级',
+        url: '/pages/service/service'
+      },
+      {
+        id: 6,
+        icon: '/images/service/paint.png',
+        name: '喷漆',
+        url: '/pages/service/service'
+      },
+      {
+        id: 7,
+        icon: '/images/service/parts.png',
+        name: '配件维修',
+        url: '/pages/service/service'
+      },
+      {
+        id: 8,
+        icon: '/images/service/film.png',
+        name: '隔热窗膜',
         url: '/pages/service/service'
       }
     ],

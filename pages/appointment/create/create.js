@@ -2,7 +2,7 @@ Page({
   data: {
     date: '',
     time: '',
-    serviceTypes: ['常规保养', '轮胎更换', '故障维修', '车辆检查'],
+    serviceTypes: ['换轮胎', '做保养', '换蓄电池', '汽车打蜡', '爱车升级', '喷漆', '配件维修', '隔热窗膜'],
     selectedService: '',
     carInfo: '',
     description: '',

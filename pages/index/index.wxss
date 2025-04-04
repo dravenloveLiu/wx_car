@@ -42,24 +42,42 @@
 /* 服务分类样式 */
 .services {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20rpx;
-  margin: 30rpx 0;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rpx;
+  padding: 15rpx;
+  margin: 20rpx 0;
+  background-color: #ffffff;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
 }
 
 .service-item {
-  height: 180rpx;
-  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10rpx;
+  margin-bottom: 10rpx;
+}
+
+.service-icon {
+  width: 60rpx;
+  height: 60rpx;
+  margin-bottom: 10rpx;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20rpx;
+}
+
+.icon {
+  font-size: 30rpx;
+  color: #ffffff;
 }
 
 .service-name {
-  color: #ffffff;
-  font-size: 32rpx;
-  font-weight: bold;
+  color: #333333;
+  font-size: 24rpx;
   text-align: center;
 }
 
@@ -145,4 +163,69 @@
   font-size: 32rpx;
   font-weight: bold;
   box-shadow: 0 4rpx 12rpx rgba(231, 76, 60, 0.3);
+}
+
+/* 精选推荐样式 */
+.recommendation-list {
+  background-color: #ffffff;
+  border-radius: 12rpx;
+  padding: 15rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.recommendation-item {
+  display: flex;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.recommendation-item:last-child {
+  border-bottom: none;
+}
+
+.recommendation-image {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.recommendation-placeholder {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.recommendation-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.recommendation-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 10rpx;
+}
+
+.recommendation-desc {
+  font-size: 26rpx;
+  color: #666666;
+  margin-bottom: 15rpx;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recommendation-price {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #e74c3c;
 } 

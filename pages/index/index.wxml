@@ -27,8 +27,10 @@
           wx:for="{{services}}" 
           wx:key="id" 
           bindtap="navigateTo" 
-          data-url="{{item.url}}"
-          style="background-color: {{item.backgroundColor}}">
+          data-url="{{item.url}}">
+      <view class="service-icon" style="background-color: {{item.iconColor}}">
+        <text class="icon">{{item.icon}}</text>
+      </view>
       <text class="service-name">{{item.name}}</text>
     </view>
   </view>
@@ -55,6 +57,33 @@
         <text class="tire-price">¥{{item.price}}</text>
       </view>
     </scroll-view>
+  </view>
+  
+  <!-- 精选推荐 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">精选推荐</text>
+      <view class="more" bindtap="navigateTo" data-url="/pages/service/list">
+        <text>更多</text>
+        <text class="arrow">></text>
+      </view>
+    </view>
+    <view class="recommendation-list">
+      <view class="recommendation-item" 
+            wx:for="{{recommendations}}" 
+            wx:key="id"
+            bindtap="navigateTo"
+            data-url="{{item.url}}">
+        <view class="recommendation-image" style="background-color: #f0f0f0">
+          <text class="recommendation-placeholder">{{item.name[0]}}</text>
+        </view>
+        <view class="recommendation-info">
+          <text class="recommendation-name">{{item.name}}</text>
+          <text class="recommendation-desc">{{item.desc}}</text>
+          <text class="recommendation-price">¥{{item.price}}</text>
+        </view>
+      </view>
+    </view>
   </view>
 
   <!-- 预约按钮 -->

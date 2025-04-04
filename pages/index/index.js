@@ -29,21 +29,59 @@ Page({
     services: [
       {
         id: 1,
-        name: '轮胎服务',
-        url: '/pages/tire/tire',
-        backgroundColor: '#1296db'
+        name: '换轮胎',
+        iconColor: '#1296db',
+        icon: '🛞',
+        url: '/pages/tire/tire'
       },
       {
         id: 2,
-        name: '日常保养',
-        url: '/pages/service/service',
-        backgroundColor: '#2ecc71'
+        name: '做保养',
+        iconColor: '#2ecc71',
+        icon: '🔧',
+        url: '/pages/service/service'
       },
       {
         id: 3,
-        name: '故障维修',
-        url: '/pages/service/service',
-        backgroundColor: '#e74c3c'
+        name: '换蓄电池',
+        iconColor: '#e74c3c',
+        icon: '🔋',
+        url: '/pages/service/service'
+      },
+      {
+        id: 4,
+        name: '汽车打蜡',
+        iconColor: '#f39c12',
+        icon: '✨',
+        url: '/pages/service/service'
+      },
+      {
+        id: 5,
+        name: '爱车升级',
+        iconColor: '#9b59b6',
+        icon: '⬆️',
+        url: '/pages/service/service'
+      },
+      {
+        id: 6,
+        name: '喷漆',
+        iconColor: '#3498db',
+        icon: '🎨',
+        url: '/pages/service/service'
+      },
+      {
+        id: 7,
+        name: '配件维修',
+        iconColor: '#27ae60',
+        icon: '🔩',
+        url: '/pages/service/service'
+      },
+      {
+        id: 8,
+        name: '隔热窗膜',
+        iconColor: '#e67e22',
+        icon: '🪟',
+        url: '/pages/service/service'
       }
     ],
     hotTires: [
@@ -64,6 +102,32 @@ Page({
         name: '固特异轮胎 EAGLE F1 ASYMMETRIC 5 225/45R17 91Y',
         price: 729,
         backgroundColor: '#f8f8f8'
+      }
+    ],
+    recommendations: [
+      {
+        id: 1,
+        name: '节能环保机油',
+        desc: '5W-30 全合成机油，提供卓越的发动机保护',
+        price: 329,
+        image: '/images/products/oil.png',
+        url: '/pages/service/detail?id=1'
+      },
+      {
+        id: 2,
+        name: '高性能刹车片',
+        desc: '适用于多种车型，提供更佳制动性能',
+        price: 499,
+        image: '/images/products/brake.png',
+        url: '/pages/service/detail?id=2'
+      },
+      {
+        id: 3,
+        name: '空调清洗套餐',
+        desc: '彻底清除异味，杀菌消毒，恢复空调清新',
+        price: 198,
+        image: '/images/products/ac.png',
+        url: '/pages/service/detail?id=3'
       }
     ]
   },
