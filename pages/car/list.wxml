@@ -1,0 +1,48 @@
+<view class="container">
+  <view class="header">
+    <view class="title">我的爱车</view>
+    <view class="add-btn" bindtap="addCar">添加车辆</view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading">
+      <image class="loading-icon" src="/images/icons/loading.png" mode="aspectFit"></image>
+      <text class="loading-text">加载中...</text>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-container" wx:elif="{{empty}}">
+    <image class="empty-icon" src="/images/icons/empty-car.png" mode="aspectFit"></image>
+    <text class="empty-text">{{isLogin ? '还没有添加爱车信息' : '请先登录'}}</text>
+    <view class="empty-btn" bindtap="{{isLogin ? 'addCar' : 'goLogin'}}">
+      {{isLogin ? '添加爱车' : '去登录'}}
+    </view>
+  </view>
+
+  <!-- 车辆列表 -->
+  <view class="car-list" wx:else>
+    <view class="car-item" wx:for="{{cars}}" wx:key="id">
+      <view class="car-info">
+        <view class="car-top">
+          <text class="car-name">{{item.brand}} {{item.model}}</text>
+          <text class="car-tag" wx:if="{{item.isDefault === 1}}">默认</text>
+        </view>
+        <view class="car-plate">{{item.plateNumber || '未设置车牌'}}</view>
+        <view class="car-details">
+          <text wx:if="{{item.year}}">{{item.year}}年</text>
+          <text wx:if="{{item.mileage}}">{{item.mileage}}公里</text>
+          <text wx:if="{{item.engineType}}">{{item.engineType}}</text>
+        </view>
+      </view>
+      
+      <view class="car-actions">
+        <view class="action-btn edit-btn" bindtap="editCar" data-id="{{item.id}}">编辑</view>
+        <view class="action-btn default-btn" bindtap="setDefault" data-id="{{item.id}}" 
+              wx:if="{{item.isDefault !== 1}}">设为默认</view>
+        <view class="action-btn delete-btn" bindtap="deleteCar" data-id="{{item.id}}">删除</view>
+      </view>
+    </view>
+  </view>
+</view> 

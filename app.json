@@ -1,34 +1,24 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/logs/logs",
     "pages/auth/auth",
-    "pages/car/car",
-    "pages/car/add",
-    "pages/car/maintenance",
-    "pages/store/list",
-    "pages/search/search",
     "pages/service/service",
-    "pages/tire/tire",
-    "pages/tire/list/list",
-    "pages/appointment/create/create",
     "pages/appointment/list/list",
     "pages/member/index/index",
-    "pages/member/points/points",
-    "pages/member/coupons/coupons",
-    "pages/member/wallet/wallet",
-    "pages/member/mall/mall",
-    "pages/tire/detail",
-    "pages/service/detail"
+    "pages/car/add",
+    "pages/car/list",
+    "pages/car/edit"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "汽车保养维修",
+    "navigationBarTitleText": "汽车服务",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
-    "color": "#999999",
-    "selectedColor": "#e74c3c",
+    "color": "#999",
+    "selectedColor": "#07c160",
     "backgroundColor": "#ffffff",
     "borderStyle": "black",
     "list": [
@@ -52,12 +42,12 @@
       },
       {
         "pagePath": "pages/member/index/index",
-        "text": "会员",
+        "text": "我的",
         "iconPath": "images/tabbar/member.png",
         "selectedIconPath": "images/tabbar/member-active.png"
       }
     ]
   },
-  "sitemapLocation": "sitemap.json",
-  "style": "v2"
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
 } 

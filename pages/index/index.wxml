@@ -47,7 +47,7 @@
   <view class="section my-car">
     <view class="section-header">
       <view class="section-title">我的爱车</view>
-      <view class="section-more" bindtap="navigateTo" data-url="/pages/car/car">管理爱车</view>
+      <view class="section-more" bindtap="navigateTo" data-url="/pages/car/list">管理爱车</view>
     </view>
     <view class="car-info" wx:if="{{userCar}}">
       <view class="car-avatar">

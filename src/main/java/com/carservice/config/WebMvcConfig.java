@@ -35,6 +35,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/api/stores/**",            // 门店相关接口
                         "/api/car/**"                // 汽车品牌、车型相关接口
                 );
+        
+        // 注意：/api/user/car 需要登录验证，所以不在排除列表中
     }
     
     /**

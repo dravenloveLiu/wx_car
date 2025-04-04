@@ -25,7 +25,8 @@ App({
     this.handleImageError();
     
     // 注意：小程序需要在项目根目录的 /images/ 文件夹中添加 logo.png 文件
-    // 该文件被用于登录页面显示，缺少此文件会导致500错误
+    // 该文件被用于登录页面显示，如果没有该文件会导致500错误
+    // 请使用微信开发者工具上传一个logo.png图片到images目录中
 
     // 检查登录状态
     const token = wx.getStorageSync('token')

@@ -11,7 +11,7 @@
         <block wx:else>
           <image class="logo" src="/images/logo.png" mode="aspectFit" binderror="handleImageError"></image>
         </block>
-        <text class="app-name">汽车保养维修</text>
+        <text class="title">汽车保养维修</text>
         <text class="subtitle">为您的爱车提供专业服务</text>
       </view>
       <button class="auth-btn" 

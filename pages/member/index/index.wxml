@@ -38,6 +38,11 @@
         <image class="icon" src="/images/member/{{item.icon}}.png" mode="aspectFit"></image>
         <text class="name">{{item.name}}</text>
       </view>
+      <!-- 管理爱车入口 -->
+      <view class="service-item" bindtap="navigateTo" data-url="/pages/car/list">
+        <image class="icon" src="/images/member/car.png" mode="aspectFit"></image>
+        <text class="name">管理爱车</text>
+      </view>
     </view>
   </view>
 

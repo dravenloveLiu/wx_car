@@ -271,12 +271,5 @@ Page({
     this.setData({
       logoLoadFailed: true
     });
-    
-    // 显示错误提示
-    wx.showToast({
-      title: '资源加载错误',
-      icon: 'none',
-      duration: 2000
-    });
   }
 })

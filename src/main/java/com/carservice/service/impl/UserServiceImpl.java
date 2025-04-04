@@ -1,13 +1,16 @@
 package com.carservice.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.carservice.common.Constant;
 import com.carservice.dto.LoginDTO;
 import com.carservice.entity.Car;
@@ -78,6 +81,7 @@ public class UserServiceImpl implements UserService {
                 car.setInfo(loginDTO.getCarInfo());
                 car.setCreateTime(LocalDateTime.now());
                 car.setStatus(Constant.Status.ENABLED);
+                car.setIsDefault(1); // 第一辆车默认设为默认车辆
                 carMapper.insert(car);
                 log.info("新用户车辆信息保存成功: {}", car);
             }
@@ -119,6 +123,7 @@ public class UserServiceImpl implements UserService {
                     car.setInfo(loginDTO.getCarInfo());
                     car.setCreateTime(LocalDateTime.now());
                     car.setStatus(Constant.Status.ENABLED);
+                    car.setIsDefault(1); // 第一辆车默认设为默认车辆
                     carMapper.insert(car);
                     log.info("用户车辆信息保存成功: {}", car);
                 } else if (!loginDTO.getCarInfo().equals(existingCar.getInfo())) {
@@ -169,7 +174,19 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(Constant.Code.UNAUTHORIZED, "用户未登录");
         }
         
-        // 查询用户的车辆
+        // 首先查询默认车辆
+        LambdaQueryWrapper<Car> defaultQuery = new LambdaQueryWrapper<>();
+        defaultQuery.eq(Car::getUserId, userId);
+        defaultQuery.eq(Car::getStatus, Constant.Status.ENABLED);
+        defaultQuery.eq(Car::getIsDefault, 1);
+        Car defaultCar = carMapper.selectOne(defaultQuery);
+        
+        // 如果有默认车辆，直接返回
+        if (defaultCar != null) {
+            return defaultCar;
+        }
+        
+        // 没有默认车辆，查询最新添加的车辆
         LambdaQueryWrapper<Car> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Car::getUserId, userId);
         queryWrapper.eq(Car::getStatus, Constant.Status.ENABLED);
@@ -177,6 +194,52 @@ public class UserServiceImpl implements UserService {
         queryWrapper.last("LIMIT 1");
         
         return carMapper.selectOne(queryWrapper);
+    }
+    
+    @Override
+    public List<Car> getUserCars() {
+        // 获取当前用户ID
+        Long userId = UserHolder.getUserId();
+        if (userId == null) {
+            throw new BusinessException(Constant.Code.UNAUTHORIZED, "用户未登录");
+        }
+        
+        // 查询用户的所有车辆
+        LambdaQueryWrapper<Car> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Car::getUserId, userId);
+        queryWrapper.eq(Car::getStatus, Constant.Status.ENABLED);
+        queryWrapper.orderByDesc(Car::getIsDefault); // 默认车辆排在前面
+        queryWrapper.orderByDesc(Car::getCreateTime); // 其次按创建时间倒序
+        
+        return carMapper.selectList(queryWrapper);
+    }
+    
+    @Override
+    public Car getCarById(Long id) {
+        // 获取当前用户ID
+        Long userId = UserHolder.getUserId();
+        if (userId == null) {
+            throw new BusinessException(Constant.Code.UNAUTHORIZED, "用户未登录");
+        }
+        
+        if (id == null) {
+            throw new BusinessException(Constant.Code.PARAM_ERROR, "车辆ID不能为空");
+        }
+        
+        // 查询指定车辆
+        Car car = carMapper.selectById(id);
+        
+        // 验证车辆是否存在
+        if (car == null) {
+            throw new BusinessException(Constant.Code.PARAM_ERROR, "车辆不存在");
+        }
+        
+        // 验证是否是当前用户的车辆
+        if (!car.getUserId().equals(userId)) {
+            throw new BusinessException(Constant.Code.FORBIDDEN, "无权查看此车辆");
+        }
+        
+        return car;
     }
     
     @Override
@@ -203,5 +266,157 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             log.error("用户登出异常，userId: {}", userId, e);
         }
+    }
+    
+    @Override
+    @Transactional
+    public Car saveUserCar(Car car) {
+        // 获取当前用户ID
+        Long userId = UserHolder.getUserId();
+        if (userId == null) {
+            throw new BusinessException(Constant.Code.UNAUTHORIZED, "用户未登录");
+        }
+        
+        // 验证必要参数
+        if (car == null) {
+            throw new BusinessException(Constant.Code.PARAM_ERROR, "车辆信息不能为空");
+        }
+        
+        // 确保车辆属于当前用户
+        car.setUserId(userId);
+        
+        // 设置时间和状态
+        if (car.getId() == null) {
+            // 新增车辆
+            car.setCreateTime(LocalDateTime.now());
+            car.setStatus(Constant.Status.ENABLED);
+            carMapper.insert(car);
+            log.info("新增车辆信息成功: {}", car);
+        } else {
+            // 更新车辆
+            Car existingCar = carMapper.selectById(car.getId());
+            if (existingCar == null) {
+                throw new BusinessException(Constant.Code.PARAM_ERROR, "车辆不存在");
+            }
+            
+            // 确保只能更新自己的车辆
+            if (!existingCar.getUserId().equals(userId)) {
+                throw new BusinessException(Constant.Code.FORBIDDEN, "无权操作此车辆");
+            }
+            
+            car.setUpdateTime(LocalDateTime.now());
+            carMapper.updateById(car);
+            log.info("更新车辆信息成功: {}", car);
+        }
+        
+        // 如果设置为默认车辆，则将其他车辆取消默认状态
+        if (car.getIsDefault() != null && car.getIsDefault() == 1) {
+            LambdaUpdateWrapper<Car> updateWrapper = new LambdaUpdateWrapper<>();
+            updateWrapper.eq(Car::getUserId, userId);
+            updateWrapper.ne(Car::getId, car.getId());
+            updateWrapper.eq(Car::getIsDefault, 1);
+            
+            Car updateCar = new Car();
+            updateCar.setIsDefault(0);
+            carMapper.update(updateCar, updateWrapper);
+        }
+        
+        return car;
+    }
+    
+    @Override
+    @Transactional
+    public Car setDefaultCar(Long id) {
+        // 获取当前用户ID
+        Long userId = UserHolder.getUserId();
+        if (userId == null) {
+            throw new BusinessException(Constant.Code.UNAUTHORIZED, "用户未登录");
+        }
+        
+        if (id == null) {
+            throw new BusinessException(Constant.Code.PARAM_ERROR, "车辆ID不能为空");
+        }
+        
+        // 查询指定车辆
+        Car car = carMapper.selectById(id);
+        
+        // 验证车辆是否存在
+        if (car == null) {
+            throw new BusinessException(Constant.Code.PARAM_ERROR, "车辆不存在");
+        }
+        
+        // 验证是否是当前用户的车辆
+        if (!car.getUserId().equals(userId)) {
+            throw new BusinessException(Constant.Code.FORBIDDEN, "无权操作此车辆");
+        }
+        
+        // 先将所有车辆设为非默认
+        LambdaUpdateWrapper<Car> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(Car::getUserId, userId);
+        updateWrapper.eq(Car::getStatus, Constant.Status.ENABLED);
+        
+        Car updateCar = new Car();
+        updateCar.setIsDefault(0);
+        carMapper.update(updateCar, updateWrapper);
+        
+        // 将指定车辆设为默认
+        car.setIsDefault(1);
+        car.setUpdateTime(LocalDateTime.now());
+        carMapper.updateById(car);
+        
+        return car;
+    }
+    
+    @Override
+    public boolean deleteCar(Long id) {
+        // 获取当前用户ID
+        Long userId = UserHolder.getUserId();
+        if (userId == null) {
+            throw new BusinessException(Constant.Code.UNAUTHORIZED, "用户未登录");
+        }
+        
+        if (id == null) {
+            throw new BusinessException(Constant.Code.PARAM_ERROR, "车辆ID不能为空");
+        }
+        
+        // 查询指定车辆
+        Car car = carMapper.selectById(id);
+        
+        // 验证车辆是否存在
+        if (car == null) {
+            throw new BusinessException(Constant.Code.PARAM_ERROR, "车辆不存在");
+        }
+        
+        // 验证是否是当前用户的车辆
+        if (!car.getUserId().equals(userId)) {
+            throw new BusinessException(Constant.Code.FORBIDDEN, "无权操作此车辆");
+        }
+        
+        // 逻辑删除，将状态设为禁用
+        car.setStatus(Constant.Status.DISABLED);
+        car.setUpdateTime(LocalDateTime.now());
+        int result = carMapper.updateById(car);
+        
+        // 如果删除的是默认车辆，则尝试将另一辆车设为默认
+        if (car.getIsDefault() != null && car.getIsDefault() == 1 && result > 0) {
+            // 查询用户的其他车辆
+            LambdaQueryWrapper<Car> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(Car::getUserId, userId);
+            queryWrapper.eq(Car::getStatus, Constant.Status.ENABLED);
+            queryWrapper.ne(Car::getId, id);
+            queryWrapper.orderByDesc(Car::getCreateTime);
+            queryWrapper.last("LIMIT 1");
+            
+            Car anotherCar = carMapper.selectOne(queryWrapper);
+            
+            // 如果有其他车辆，将其设为默认
+            if (anotherCar != null) {
+                anotherCar.setIsDefault(1);
+                anotherCar.setUpdateTime(LocalDateTime.now());
+                carMapper.updateById(anotherCar);
+            }
+        }
+        
+        return result > 0;
     }
 } 

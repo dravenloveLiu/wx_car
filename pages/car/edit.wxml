@@ -1,0 +1,111 @@
+<view class="container">
+  <view class="header">
+    <view class="title">编辑爱车</view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-container" wx:if="{{loadingCar}}">
+    <view class="loading">
+      <image class="loading-icon" src="/images/icons/loading.png" mode="aspectFit"></image>
+      <text class="loading-text">加载中...</text>
+    </view>
+  </view>
+
+  <!-- 表单 -->
+  <view class="form-container" wx:else>
+    <view class="form-group">
+      <!-- 品牌选择 -->
+      <view class="form-item">
+        <text class="label required">品牌</text>
+        <picker mode="selector" 
+                range="{{carBrands.length > 0 ? carBrands : brands}}" 
+                range-key="{{carBrands.length > 0 ? 'name' : ''}}"
+                bindchange="bindBrandChange">
+          <view class="picker {{carForm.brand ? '' : 'placeholder'}}">
+            {{carForm.brand || '请选择品牌'}}
+          </view>
+        </picker>
+      </view>
+
+      <!-- 车型选择 -->
+      <view class="form-item">
+        <text class="label required">车型</text>
+        <picker mode="selector" 
+                range="{{carModels}}" 
+                range-key="name"
+                bindchange="bindModelChange"
+                disabled="{{!carForm.brandId || carModels.length === 0}}">
+          <view class="picker {{carForm.model ? '' : 'placeholder'}}">
+            {{carForm.model || '请先选择品牌'}}
+          </view>
+        </picker>
+      </view>
+
+      <!-- 车牌号 -->
+      <view class="form-item">
+        <text class="label required">车牌号</text>
+        <input class="input" 
+               type="text"
+               placeholder="请输入车牌号"
+               value="{{carForm.plateNumber}}"
+               data-field="plateNumber"
+               bindinput="inputChange" />
+      </view>
+
+      <!-- 年份 -->
+      <view class="form-item">
+        <text class="label">年份</text>
+        <input class="input" 
+               type="digit"
+               placeholder="如: 2020"
+               value="{{carForm.year}}"
+               data-field="year"
+               bindinput="inputChange" />
+      </view>
+
+      <!-- 行驶里程 -->
+      <view class="form-item">
+        <text class="label">行驶里程(公里)</text>
+        <input class="input" 
+               type="digit"
+               placeholder="如: 20000"
+               value="{{carForm.mileage}}"
+               data-field="mileage"
+               bindinput="inputChange" />
+      </view>
+
+      <!-- 发动机类型 -->
+      <view class="form-item">
+        <text class="label">发动机类型</text>
+        <picker mode="selector" 
+                range="{{engineTypes}}" 
+                bindchange="bindEngineTypeChange">
+          <view class="picker {{carForm.engineType ? '' : 'placeholder'}}">
+            {{carForm.engineType || '请选择发动机类型'}}
+          </view>
+        </picker>
+      </view>
+
+      <!-- 购买日期 -->
+      <view class="form-item">
+        <text class="label">购买日期</text>
+        <picker mode="date" 
+                bindchange="bindDateChange">
+          <view class="picker {{carForm.buyDate ? '' : 'placeholder'}}">
+            {{carForm.buyDate || '请选择购买日期'}}
+          </view>
+        </picker>
+      </view>
+
+      <!-- 是否默认 -->
+      <view class="form-item switch-item">
+        <text class="label">设为默认车辆</text>
+        <switch checked="{{carForm.isDefault === 1}}" bindchange="switchChange" color="#07c160" />
+      </view>
+    </view>
+
+    <view class="footer">
+      <view class="submit-btn" bindtap="submitForm">保存修改</view>
+    </view>
+  </view>
+</view> 
